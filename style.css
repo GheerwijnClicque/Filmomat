@@ -1,0 +1,51 @@
+/*
+colors:
+#4CD4B0
+#FFFCE6
+#EDD834
+#F24D16
+#7D1424
+#F0F0F0
+#3E4651
+#5C6D7E
+*/
+
+body {
+    width: 70%;
+    margin: 0 auto;
+}
+
+header {
+    width: 100%;
+}
+
+nav ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #3E4651;
+}
+nav ul li{
+    list-style: none;
+    float: left;
+}
+
+nav li a {
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    display: block;
+    padding: 1rem 2rem;
+}
+
+nav li a:hover {
+    background-color: #5C6D7E;
+}
+
+nav h1 {
+    color: white;
+    margin-right: 4rem;
+    margin-left: 1rem;
+    line-height: 10px;
+}
