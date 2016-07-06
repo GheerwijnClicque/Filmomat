@@ -1,0 +1,12 @@
+film = TMAX 400
+
+    developer = Tmax developer
+    fixer = Tmax fixer
+    dilution = 1:4
+    temp = 21C
+
+    Develop -> 6:45m, agitate every 30s
+    Wash    -> 1m
+    (optional stop bath & wash)
+    Fix     -> 3m, agitate every 30s
+    Wash    -> 2m

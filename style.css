@@ -19,6 +19,7 @@ header {
     width: 100%;
 }
 
+/* NAVIGATION BAR */
 nav ul {
     list-style-type: none;
     margin: 0;
@@ -48,4 +49,62 @@ nav h1 {
     margin-right: 4rem;
     margin-left: 1rem;
     line-height: 10px;
+}
+
+/* MAIN CONTENT (films) */
+
+#content {
+    text-align: center;
+}
+
+#films {
+    width: 50%;
+    margin-top: 2rem;
+    display: inline-block;
+    list-style-type: none;
+
+}
+
+#films ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+
+#films li a {
+    text-align: center;
+    text-decoration: none;
+    color: white;
+    border-top: 1px solid #fff;
+    background-color: #3E4651;
+    display: block;
+    padding: 1rem 2rem;
+}
+
+#films li a:hover {
+    background-color: #5C6D7E;
+}
+
+#pagination {
+    margin-top: 1rem;
+}
+
+#previous {
+    float: left;
+    width: 30%;
+}
+
+#next {
+    float: right;
+    width: 30%;
+}
+
+/* CONTENT (processes) */
+
+#processes li a {
+    background-color: #7D1424;
+    float: left;
+    width: 23%;
+    border-right: 1px solid white;
 }
