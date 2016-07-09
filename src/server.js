@@ -8,10 +8,15 @@ app.set('view engine', 'ejs');
 
 app.use(express.static(__dirname + '/public'));
 
+
 console.log(__dirname + '\\css');
 
 app.get('/', function(req, res) {
 	res.render('index', {});
+});
+
+app.get('/newfilm', function(req, res) {
+	res.render('addfilm', {});
 });
 
 var server = app.listen(config.port, function() {
