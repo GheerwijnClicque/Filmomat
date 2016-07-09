@@ -52,6 +52,9 @@ nav h1 {
 }
 
 /* MAIN CONTENT (films) */
+li {
+    list-style-type: none;
+}
 
 #content {
     text-align: center;
