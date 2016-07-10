@@ -23,7 +23,10 @@
         <div id="content">
             <div id="films">
                 <ul>
-                    <li class="film"><a href="#">Delta 400</a></li>
+                    <% films.forEach(function(film) { %>
+                        <li class="film"><a href="#"><%= film.film_name %> <%= film.iso %></a></li>
+                    <% }); %>
+                    <!--  process dummy -->
                     <div id="processes">
                         <ul>
                             <li><a href="#">1st process</a></li>
@@ -35,9 +38,7 @@
                         </ul>
                     </div>
 
-                    <li class="film"><a href="#">HP5+</a></li>
-                    <li class="film"><a href="#">PAN F</a></li>
-                    <li class="film"><a href="#">T-MAX 400</a></li>
+
                 </ul>
                 <li id="pagination"><a href="#" id="previous">Previous page</a><a href="#" id="next">Next page</a></li>
             </div>
