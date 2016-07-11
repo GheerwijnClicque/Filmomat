@@ -48,6 +48,8 @@ app.get('/', function(req, res) {
 	});
 });
 
+
+// Add new film
 app.get('/newfilm', function(req, res) {
 	res.render('newfilm', {});
 });
@@ -61,6 +63,18 @@ app.post('/newfilm', function(req, res) {
 		db.each("INSERT INTO films(film_name, iso, manufacturer) VALUES ($name, $iso, $manufacturer)", {$name: name, $iso: iso, $manufacturer: manufacturer});
 	});
 });
+
+// Add new process for film
+app.get('/newprocess', function(req, res) {
+	res.render('newprocess', {});
+});
+
+
+
+
+
+
+
 
 var server = app.listen(config.port, function() {
 	console.log('Express server listening on port ' + config.port);

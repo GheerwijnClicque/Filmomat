@@ -6,6 +6,7 @@
         <title>Filmomat</title>
         <link rel="stylesheet" href="/css/style.css" type="text/css">
         <link rel="stylesheet" href="/css/newfilm.css" type="text/css">
+        <link rel="stylesheet" href="/css/newprocess.css" type="text/css">
         <script src="bower_components/jquery/dist/jquery.min.js"></script>
         <script src="js/script.js"></script>
     </head>
@@ -23,12 +24,29 @@
 
         <div id="content">
             <form action="newfilm" method="post">
-                <ul>
+                <ul id="steps">
                     <li><p>Name:</p><input name="name" type="text"/></li>
-                    <li><p>ISO:</p><input name="iso" type="text"/></li>
-                    <li><p>Manufacturer:</p><input name="manufacturer" type="text"/></li>
-                    <li><input id="submit" type="submit" value="Add new film"/></li>
+                    <li>Steps:</li>
+
+                    <ul class="step">
+                        <div id="left">
+                            <li><p>Name:</p><input name="name" type="text"/></li>
+                            <li><p>Duration:</p><input name="name" type="text"/></li>
+                            <li><p>Temperature:</p><input name="name" type="text"/></li>
+                        </div>
+                        <div id="right">
+                            <li><p>Interval:</p><input name="name" type="text"/></li>
+                            <li><p>Chemical:</p><input name="name" type="text"/></li>
+                            <li><p>Dilution:</p><input name="name" type="text"/></li>
+                        </div>
+                    </ul>
+
+
+
+                    <li><a href="#" id="newstep">Add new step</a></li>
+                    <li><input id="submit" type="submit" value="Add new process"/></li>
                 </ul>
+
             </form>
         </div>
 
