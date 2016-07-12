@@ -1,7 +1,4 @@
-.step {
-    background-color: #dadada;
-    margin: auto;
-}
+
 
 .step li {
     background-color: #dadada;
@@ -9,13 +6,17 @@
 }
 
 .step input[type=text] {
-    width: 50%;
+    width: 100%;
     padding: 12px 20px;
     margin: 8px 0;
     display: inline-block;
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+form input[type=text], input[type=number] {
+    width: 100%;
 }
 
 #left {
@@ -27,4 +28,14 @@
     float: right;
     width: 50%;
 
+}
+
+table {
+    width: 100%;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+#processName {
+    width: 50%;
 }

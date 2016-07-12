@@ -25,10 +25,8 @@
         <div id="content">
             <form action="newfilm" method="post">
                 <ul id="steps">
-                    <li><p>Name:</p><input name="name" type="text"/></li>
-                    <li>Steps:</li>
-
-                    <ul class="step">
+                    <li><p>Name:</p><input id="processName" type="text"/></li>
+                    <!-- <ul class="step">
                         <div id="left">
                             <li><p>Name:</p><input name="name" type="text"/></li>
                             <li><p>Duration:</p><input name="name" type="text"/></li>
@@ -39,12 +37,40 @@
                             <li><p>Chemical:</p><input name="name" type="text"/></li>
                             <li><p>Dilution:</p><input name="name" type="text"/></li>
                         </div>
-                    </ul>
+                    </ul> -->
 
+                    <table>
+                      <tr>
+                        <th>Name</th>
+                        <th>Duration</th>
+                        <th>Temperature (C)</th>
+                        <th>Interval</th>
+                        <th>Chemical</th>
+                        <th>Dilution</th>
+                        <th><a href="#" id="newstep">Add new step</a></th>
+                      </tr>
+                      <tr class="step">
+                        <td><input type="text" value="1" placeholder="Developing" id="name"/></td>
+                        <td><input type="time" value="" id="duration"/></td>
+                        <td><input type="number" value="34" placeholder="21" id="temperature"/></td>
+                        <td><input type="time" value="" id="interval"/></td>
+                        <td><input type="text" value="TESTCHEMICAL" placeholder="T-max developer" id="chemical"/></td>
+                        <td><input type="text" value="TEST:DILUTION" placeholder="1:4" id="dilution"/></td>
+                        <td><a href="#">Delete</a></td>
+                      </tr>
+                      <tr class="step">
+                          <td><input type="text" value="2" placeholder="Developing" id="name"/></td>
+                          <td><input type="time" value="" id="duration"/></td>
+                          <td><input type="number" value="4" placeholder="21" id="temperature"/></td>
+                          <td><input type="time" value="" id="interval"/></td>
+                          <td><input type="text" value="TEST2CHEMICAL" placeholder="T-max developer" id="chemical"/></td>
+                          <td><input type="text" value="TEST2:DILUTION" placeholder="1:4" id="dilution"/></td>
+                        <td><a href="#">Delete</a></td>
+                      </tr>
+                    </table>
 
-
-                    <li><a href="#" id="newstep">Add new step</a></li>
-                    <li><input id="submit" type="submit" value="Add new process"/></li>
+                    <!-- <li><a href="#" id="newstep">Add new step</a></li> -->
+                    <li><input id="submit" type="submit" value="Save process"/></li>
                 </ul>
 
             </form>
