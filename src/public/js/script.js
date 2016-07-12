@@ -12,9 +12,13 @@ $(function() {
     $('#submit').on('click', function(e) {
         e.preventDefault();
         $('.step').each(function() {
-            $('td input').each(function() {
-                console.log($(this).val());
-            });
+			$(this).find('td input').each(function() {
+				console.log($(this).val());
+			});
+
+            // $('td input').each(function() {
+            //     console.log($(this).val());
+            // });
         });
 
 
