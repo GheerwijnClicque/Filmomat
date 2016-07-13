@@ -69,7 +69,30 @@ app.get('/newprocess', function(req, res) {
 	res.render('newprocess', {});
 });
 
+app.post('/addprocess', function(req, res) {
+	var steps = req.body.data;
+	var processName = req.body.name;
+	var lastProcessId = 0;
 
+	db.serialize(function() {
+		db.each("SELECT COUNT(*) as count FROM processes where process_name = $name", {$name: processName}, function(error, row) {
+			if(row.count === 0) {
+				db.run("INSERT INTO processes(film_id, process_name) VALUES ($id, $name)", {$id: 1, $name: processName}, function() {
+					lastProcessId = this.lastID;
+					for(var i = 0; i < steps.length; i++) {
+						db.run("INSERT INTO steps(process_id, step_name, step_time, temp, interval, chemical, dilution) VALUES ($process_id, $name, $time, $temp, $interval, $chemical, $dilution)", {$process_id: lastProcessId, $name: steps[i].name, $time: steps[i].duration, $temp: steps[i].temperature, $interval: steps[i].interval, $chemical: steps[i].chemical, $dilution: steps[i].dilution });
+					}
+				});
+			}
+			else {
+				console.log("already exists");
+				// not working
+				res.writeHead(200, { 'Content-Type': 'application/text' });
+				res.end('Process name already exists!');
+			}
+		});
+	});
+});
 
 
 

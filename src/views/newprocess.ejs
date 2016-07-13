@@ -25,7 +25,7 @@
         <div id="content">
             <form action="newfilm" method="post">
                 <ul id="steps">
-                    <li><p>Name:</p><input id="processName" type="text"/></li>
+                    <li><p>Name:</p><input id="processName" type="text" value="Process Name"/></li>
                     <!-- <ul class="step">
                         <div id="left">
                             <li><p>Name:</p><input name="name" type="text"/></li>
@@ -50,21 +50,33 @@
                         <th><a href="#" id="newstep">Add new step</a></th>
                       </tr>
                       <tr class="step">
-                        <td><input type="text" value="1" placeholder="Developing" id="name"/></td>
-                        <td><input type="time" value="" id="duration"/></td>
-                        <td><input type="number" value="34" placeholder="21" id="temperature"/></td>
-                        <td><input type="time" value="" id="interval"/></td>
-                        <td><input type="text" value="TESTCHEMICAL" placeholder="T-max developer" id="chemical"/></td>
-                        <td><input type="text" value="TEST:DILUTION" placeholder="1:4" id="dilution"/></td>
+                        <td><input type="text" value="1" placeholder="Developing" class="name"/></td>
+                        <td><input type="time" value="" class="duration"/></td>
+                        <td><input type="number" value="34" placeholder="21" class="temperature"/></td>
+                        <td><input type="time" value="" class="interval"/></td>
+                        <td><select class="chemical">
+                              <option value="A">A</option>
+                              <option value="B">B</option>
+                              <option value="C">C</option>
+                              <option value="water">Water</option>
+                            </select>
+                        </td>
+                        <td><input type="text" value="TEST:DILUTION" placeholder="1:4" class="dilution"/></td>
                         <td><a href="#">Delete</a></td>
                       </tr>
                       <tr class="step">
-                          <td><input type="text" value="2" placeholder="Developing" id="name"/></td>
-                          <td><input type="time" value="" id="duration"/></td>
-                          <td><input type="number" value="4" placeholder="21" id="temperature"/></td>
-                          <td><input type="time" value="" id="interval"/></td>
-                          <td><input type="text" value="TEST2CHEMICAL" placeholder="T-max developer" id="chemical"/></td>
-                          <td><input type="text" value="TEST2:DILUTION" placeholder="1:4" id="dilution"/></td>
+                          <td><input type="text" value="2" placeholder="Developing" class="name"/></td>
+                          <td><input type="time" value="" class="duration"/></td>
+                          <td><input type="number" value="4" placeholder="21" class="temperature"/></td>
+                          <td><input type="time" value="" class="interval"/></td>
+                          <td><select class="chemical">
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                                <option value="water">Water</option>
+                              </select>
+                          </td>
+                          <td><input type="text" value="TEST2:DILUTION" placeholder="1:4" class="dilution"/></td>
                         <td><a href="#">Delete</a></td>
                       </tr>
                     </table>

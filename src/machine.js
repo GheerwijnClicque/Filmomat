@@ -1,5 +1,5 @@
 var five = require('johnny-five');
-var board = new five.Board({port: 'com4'}); // {port: 'com4'}
+var board = new five.Board(); // {port: 'com4'}
 
 var machine = function() {};
 
