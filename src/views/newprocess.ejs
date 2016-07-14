@@ -7,8 +7,8 @@
         <link rel="stylesheet" href="/css/style.css" type="text/css">
         <link rel="stylesheet" href="/css/newfilm.css" type="text/css">
         <link rel="stylesheet" href="/css/newprocess.css" type="text/css">
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="js/script.js"></script>
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../js/script.js"></script>
     </head>
     <body>
         <header>
@@ -16,7 +16,7 @@
                 <ul>
                     <li><h1>Automatic film processor</h1></li>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/newprocess">PROCESSTEST</a></li>
+                    <li><a href="/newprocess/1">PROCESSTEST</a></li>
                     <li><a href="/newfilm">Add new film</a></li>
                 </ul>
             </nav>
@@ -24,21 +24,9 @@
 
         <div id="content">
             <form action="newfilm" method="post">
+                <p id="filmID" style="display: none;"><%= id %></p>
                 <ul id="steps">
                     <li><p>Name:</p><input id="processName" type="text" value="Process Name"/></li>
-                    <!-- <ul class="step">
-                        <div id="left">
-                            <li><p>Name:</p><input name="name" type="text"/></li>
-                            <li><p>Duration:</p><input name="name" type="text"/></li>
-                            <li><p>Temperature:</p><input name="name" type="text"/></li>
-                        </div>
-                        <div id="right">
-                            <li><p>Interval:</p><input name="name" type="text"/></li>
-                            <li><p>Chemical:</p><input name="name" type="text"/></li>
-                            <li><p>Dilution:</p><input name="name" type="text"/></li>
-                        </div>
-                    </ul> -->
-
                     <table>
                       <tr>
                         <th>Name</th>
@@ -81,12 +69,10 @@
                       </tr>
                     </table>
 
-                    <!-- <li><a href="#" id="newstep">Add new step</a></li> -->
                     <li><input id="submitProcess" type="submit" value="Save process"/></li>
                 </ul>
 
             </form>
         </div>
-
     </body>
 </html>

@@ -5,8 +5,8 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Filmomat</title>
         <link rel="stylesheet" href="/css/style.css" type="text/css">
-        <script src="bower_components/jquery/dist/jquery.min.js"></script>
-        <script src="js/script.js"></script>
+        <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="../js/script.js"></script>
     </head>
     <body>
         <header>
@@ -14,7 +14,7 @@
                 <ul>
                     <li><h1>Automatic film processor</h1></li>
                     <li><a href="/">Home</a></li>
-                    <li><a href="/newprocess">PROCESSTEST</a></li>
+                    <li><a href="/newprocess/1">PROCESSTEST</a></li>
                     <li><a href="/newfilm">Add new film</a></li>
                 </ul>
             </nav>
@@ -24,7 +24,7 @@
             <div id="films">
                 <ul>
                     <% films.forEach(function(film) { %>
-                        <li class="film"><a href="#"><%= film.film_name %> <%= film.iso %></a></li>
+                        <li class="film"><span><a href="#"><%= film.film_name %> <%= film.iso %></a><a href="/newprocess/<%= film.id %>" class="id">New process</a></span></li>
                     <% }); %>
                     <!--  process dummy -->
                     <div id="processes">

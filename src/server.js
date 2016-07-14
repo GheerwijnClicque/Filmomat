@@ -65,19 +65,20 @@ app.post('/newfilm', function(req, res) {
 });
 
 // Add new process for film
-app.get('/newprocess', function(req, res) {
-	res.render('newprocess', {});
+app.get('/newprocess/:id', function(req, res) {
+	res.render('newprocess', {id: req.params.id});
 });
 
-app.post('/addprocess', function(req, res) {
+app.post('/addprocess/:id', function(req, res) {
 	var steps = req.body.data;
 	var processName = req.body.name;
 	var lastProcessId = 0;
 
+	var filmId = req.params.id;
 	db.serialize(function() {
 		db.each("SELECT COUNT(*) as count FROM processes where process_name = $name", {$name: processName}, function(error, row) {
 			if(row.count === 0) {
-				db.run("INSERT INTO processes(film_id, process_name) VALUES ($id, $name)", {$id: 1, $name: processName}, function() {
+				db.run("INSERT INTO processes(film_id, process_name) VALUES ($id, $name)", {$id: filmId, $name: processName}, function() {
 					lastProcessId = this.lastID;
 					for(var i = 0; i < steps.length; i++) {
 						db.run("INSERT INTO steps(process_id, step_name, step_time, temp, interval, chemical, dilution) VALUES ($process_id, $name, $time, $temp, $interval, $chemical, $dilution)", {$process_id: lastProcessId, $name: steps[i].name, $time: steps[i].duration, $temp: steps[i].temperature, $interval: steps[i].interval, $chemical: steps[i].chemical, $dilution: steps[i].dilution });
