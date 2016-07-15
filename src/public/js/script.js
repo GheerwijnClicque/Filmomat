@@ -39,6 +39,59 @@ $(function() {
         });
     });
 
+    $('.process').on('click', function() {
+        var processid = $(this).find('a').attr('id');
+
+
+
+        var urlString = '../steps/'.concat(processid);
+        var parent = $(this).parent();
+        $.ajax({
+            method: "GET",
+            url: urlString,
+            dataType: 'text'
+        }).done(function(data) {
+            // console.log("received data: " + data);
+            // console.log(parent.find("#steps_process".concat(processid)).data());
+
+
+            if(parent.find("#steps_process".concat(processid)).attr("data") === "show") {
+                parent.find("#steps_process".concat(processid)).empty();
+                parent.find("#steps_process".concat(processid)).attr("data", "hide");
+            }
+            else {
+                // parent.find("#steps_process".concat(processid)).append();
+                var steps = JSON.parse(data);
+                parent.find("#steps_process".concat(processid)).append('<table> \
+                                            <tr> \
+                                              <th>Name</th> \
+                                              <th>Duration</th> \
+                                              <th>Temperature (C)</th> \
+                                              <th>Interval</th> \
+                                              <th>Chemical</th> \
+                                              <th>Dilution</th> \
+                                            </tr> \
+                                            </table');
+
+                for(var i = 0; i < steps.length; i++) {
+                    var duration = steps[i].step_time;
+                    var interval = steps[i].interval;
+                    parent.find("#steps_process".concat(processid).concat(" table")).append('<tr class="step"> \
+                                  <td>' + steps[i].step_name + '</td> \
+                                  <td>' + duration + '</td> \
+                                  <td>' + steps[i].temp + '</td> \
+                                  <td>' + interval + '</td> \
+                                  <td>' + steps[i].chemical + '</td> \
+                                  <td>' + steps[i].dilution + '</td> \
+                                </tr>');
+                    console.log(steps[i]);
+                }
+
+                parent.find("#steps_process".concat(processid)).attr("data", "show");
+            }
+        });
+    });
+
 
 
 

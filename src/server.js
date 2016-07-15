@@ -95,9 +95,34 @@ app.post('/addprocess/:id', function(req, res) {
 	});
 });
 
+// Add new process for film
+app.get('/processes/:id', function(req, res) {
+	var id = req.params.id;
+	var processes = [];
+	db.serialize(function() {
+		db.all("SELECT * FROM PROCESSES where film_id = $id", {$id: id} ,function(error, row) {
+			processes = row;
+			res.render('processes', {processes: processes});
+		});
+	});
+});
+
+app.get('/steps/:processid', function(req, res) {
+	var processid = req.params.processid;
+	var steps = [];
+
+	console.log(processid);
+	db.serialize(function() {
+		db.all("SELECT * FROM STEPS where process_id = $id", {$id: processid} ,function(error, row) {
+			steps = row;
+			res.send(steps);
+		});
+	});
 
 
 
+
+});
 
 
 var server = app.listen(config.port, function() {
