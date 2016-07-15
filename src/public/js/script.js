@@ -1,10 +1,6 @@
 $(function() {
     $('#processes').hide();
 
-    $('.film a').on('click', function() {
-        $('#processes').toggle();
-    });
-
     $('#newstep').on('click', function() {
         $('#steps table').append('<tr class="step"><td><input type="text" value="2" placeholder="Developing" class="name"/></td><td><input type="time" value="" class="duration"/></td><td><input type="number" value="4" placeholder="21" class="temperature"/></td><td><input type="time" value="" class="interval"/></td><td><select class="chemical"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="water">Water</option></select></td><td><input type="text" value="TEST2:DILUTION" placeholder="1:4" class="dilution"/></td><td><a href="#">Delete</a></td></tr>');
     });
@@ -51,9 +47,7 @@ $(function() {
             url: urlString,
             dataType: 'text'
         }).done(function(data) {
-            // console.log("received data: " + data);
             // console.log(parent.find("#steps_process".concat(processid)).data());
-
 
             if(parent.find("#steps_process".concat(processid)).attr("data") === "show") {
                 parent.find("#steps_process".concat(processid)).empty();
@@ -66,7 +60,7 @@ $(function() {
                                             <tr> \
                                               <th>Name</th> \
                                               <th>Duration</th> \
-                                              <th>Temperature (C)</th> \
+                                              <th>Temperature (&#8451;)</th> \
                                               <th>Interval</th> \
                                               <th>Chemical</th> \
                                               <th>Dilution</th> \

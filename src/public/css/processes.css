@@ -1,0 +1,40 @@
+table {
+    width: 100%;
+    margin-bottom: 2rem;
+    border-collapse: collapse;
+}
+
+th, td {
+    line-height: 2rem;
+    border-bottom: 1px solid #ddd;
+}
+
+tr:hover {
+    background-color: #f5f5f5
+}
+
+th {
+    background-color: #f5f5f5;
+    color: black;
+}
+
+.process {
+    width: 100%;
+    padding: 1rem 0rem;
+    border-top: 1px solid #fff;
+    background-color: #3E4651;
+    display: block;
+}
+
+.process:hover {
+    background-color: #5C6D7E;
+}
+
+.process a {
+    color: white;
+    text-decoration: none;
+}
+
+ul {
+    padding-left: 0rem;
+}
