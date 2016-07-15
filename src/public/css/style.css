@@ -111,12 +111,3 @@ li {
     float: right;
     width: 30%;
 }
-
-/* CONTENT (processes) */
-
-#processes li a {
-    background-color: #7D1424;
-    float: left;
-    width: 23%;
-    border-right: 1px solid white;
-}

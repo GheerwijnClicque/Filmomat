@@ -5,6 +5,8 @@
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>Filmomat</title>
         <link rel="stylesheet" href="/css/style.css" type="text/css">
+        <link rel="stylesheet" href="../bower_components/font-awesome/css/font-awesome.css" type="text/css">
+
         <script src="../bower_components/jquery/dist/jquery.min.js"></script>
         <script src="../js/script.js"></script>
     </head>
@@ -15,7 +17,7 @@
                     <li><h1>Automatic film processor</h1></li>
                     <li><a href="/">Home</a></li>
                     <!-- <li><a href="/newprocess/1">PROCESSTEST</a></li> -->
-                    <li><a href="/newfilm">Add new film</a></li>
+                    <li><a href="/newfilm"><i class="fa fa-plus" aria-hidden="true"></i> Add film</a></li>
                 </ul>
             </nav>
         </header>
@@ -24,23 +26,10 @@
             <div id="films">
                 <ul>
                     <% films.forEach(function(film) { %>
-                        <li class="film"><span><a href="/processes/<%= film.id %>"><%= film.film_name %> <%= film.iso %></a><a href="/newprocess/<%= film.id %>" class="id">New process</a></span></li>
+                        <li class="film"><span><a href="/processes/<%= film.id %>"><%= film.film_name %> <%= film.iso %></a><a href="/newprocess/<%= film.id %>" class="id"><i class="fa fa-plus" aria-hidden="true"></i></a></span></li>
                     <% }); %>
-                    <!--  process dummy -->
-                    <div id="processes">
-                        <ul>
-                            <li><a href="#">1st process</a></li>
-                            <li><a href="#">2nd process</a></li>
-                            <li><a href="#">3th process</a></li>
-                            <li><a href="#">4th process</a></li>
-                            <li><a href="#">5th process</a></li>
-                            <li><a href="#">6th process</a></li>
-                        </ul>
-                    </div>
-
-
                 </ul>
-                <li id="pagination"><a href="#" id="previous">Previous page</a><a href="#" id="next">Next page</a></li>
+                <!-- <li id="pagination"><a href="#" id="previous">Previous page</a><a href="#" id="next">Next page</a></li> -->
             </div>
         </div>
 
