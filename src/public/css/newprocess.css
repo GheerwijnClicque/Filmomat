@@ -39,3 +39,18 @@ table {
 #processName {
     width: 50%;
 }
+
+.deleteStep .fa-trash-o {
+    color: #5C6D7E;
+    margin-left: 1rem;
+}
+
+.deleteStep .fa-trash-o:hover {
+    color: red;
+}
+
+#newstep {
+    color: black;
+    margin-left: 1rem;
+
+}

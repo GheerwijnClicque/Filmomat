@@ -13,6 +13,8 @@ colors:
 body {
     width: 70%;
     margin: 0 auto;
+    font-family: Arial;
+    font-size: 13px;
 }
 
 header {

@@ -50,3 +50,38 @@ ul {
     display: inline-block;
     margin-top: 1rem;
 }
+
+#processContainer h3 {
+    margin-bottom: 4rem;
+    margin-top: 2rem;
+    color: black;
+}
+
+#processContainer #newProcess h2 {
+    padding: 1rem 0rem;
+    border: solid #5C6D7E;
+    color: #5C6D7E;
+    margin: auto;
+    width: 50%;
+    -webkit-transition: all 0.5s;
+
+}
+
+#processContainer #newProcess {
+    text-decoration: none;
+}
+
+#processContainer #newProcess h2:hover {
+    background-color: #5C6D7E;
+    color: white;
+}
+
+.delete {
+    color: white;
+    float: left;
+    margin-left: 2rem;
+}
+
+.delete:hover {
+    color: #b92038;
+}

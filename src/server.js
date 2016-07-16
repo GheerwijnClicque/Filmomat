@@ -24,7 +24,6 @@ app.get('/', function(req, res) {
 
 	// function to render
 	var render = function() {
-		console.log(getRow);
 		res.render('index', {films: getRow } );
 	};
 
@@ -59,9 +58,13 @@ app.post('/newfilm', function(req, res) {
 	var iso = req.body.iso;
 	var manufacturer = req.body.manufacturer;
 
-	db.serialize(function() {
-		db.each("INSERT INTO films(film_name, iso, manufacturer) VALUES ($name, $iso, $manufacturer)", {$name: name, $iso: iso, $manufacturer: manufacturer});
-	});
+	if(name !== "" && iso !== 0 && manufacturer !== "") {
+		db.serialize(function() {
+			db.each("INSERT INTO films(film_name, iso, manufacturer) VALUES ($name, $iso, $manufacturer)", {$name: name, $iso: iso, $manufacturer: manufacturer}, function() {
+				res.redirect('/');
+			});
+		});
+	}
 });
 
 // Add new process for film
@@ -76,7 +79,7 @@ app.post('/addprocess/:id', function(req, res) {
 
 	var filmId = req.params.id;
 	db.serialize(function() {
-		db.each("SELECT COUNT(*) as count FROM processes where process_name = $name", {$name: processName}, function(error, row) {
+		db.each("SELECT COUNT(*) as count FROM processes where process_name = $name AND film_id = $id", {$name: processName, $id: filmId}, function(error, row) {
 			if(row.count === 0) {
 				db.run("INSERT INTO processes(film_id, process_name) VALUES ($id, $name)", {$id: filmId, $name: processName}, function() {
 					lastProcessId = this.lastID;
@@ -88,8 +91,7 @@ app.post('/addprocess/:id', function(req, res) {
 			else {
 				console.log("already exists");
 				// not working
-				res.writeHead(200, { 'Content-Type': 'application/text' });
-				res.end('Process name already exists!');
+				// res.send('Process name already exists!');
 			}
 		});
 	});
@@ -102,7 +104,7 @@ app.get('/processes/:id', function(req, res) {
 	db.serialize(function() {
 		db.all("SELECT * FROM PROCESSES where film_id = $id", {$id: id} ,function(error, row) {
 			processes = row;
-			res.render('processes', {processes: processes});
+			res.render('processes', {processes: processes, id: req.params.id});
 		});
 	});
 });
@@ -111,19 +113,42 @@ app.get('/steps/:processid', function(req, res) {
 	var processid = req.params.processid;
 	var steps = [];
 
-	console.log(processid);
 	db.serialize(function() {
 		db.all("SELECT * FROM STEPS where process_id = $id", {$id: processid} ,function(error, row) {
 			steps = row;
 			res.send(steps);
 		});
 	});
-
-
-
-
 });
 
+app.get('/processes/delete/:id', function(req, res) {
+	var processid = req.params.id;
+	db.parallelize(function() {
+		db.run("DELETE FROM PROCESSES WHERE processid = $id", {$id: processid}, function(error, row) {
+			console.log(this.changes);
+		});
+		db.run("DELETE FROM STEPS WHERE process_id = $id", {$id: processid}, function(error, row) {
+			console.log(this.changes);
+		});
+	});
+});
+
+// app.get('/film/delete/:id', function(req, res) {
+// 	console.log("delete film: " + req.params.id);
+// 	var filmid = req.params.id;
+// 	db.serialize(function() {
+// 		db.run("DELETE FROM FILMS WHERE id = $id", {$id: filmid}, function(error, row) {
+// 			console.log(this.changes);
+// 		});
+// 		db.run("DELETE FROM PROCESSES WHERE film_id = $id", {$id: filmid}, function(error, row) {
+// 			console.log(row);
+// 			console.log(this.changes);
+// 		});
+// 		db.run("", {$id: filmid}, function(error, row) {
+// 			console.log(this.changes);
+// 		});
+// 	});
+// });
 
 var server = app.listen(config.port, function() {
 	console.log('Express server listening on port ' + config.port);

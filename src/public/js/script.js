@@ -1,8 +1,10 @@
 $(function() {
     $('#processes').hide();
 
-    $('#newstep').on('click', function() {
-        $('#steps table').append('<tr class="step"><td><input type="text" value="2" placeholder="Developing" class="name"/></td><td><input type="time" value="" class="duration"/></td><td><input type="number" value="4" placeholder="21" class="temperature"/></td><td><input type="time" value="" class="interval"/></td><td><select class="chemical"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="water">Water</option></select></td><td><input type="text" value="TEST2:DILUTION" placeholder="1:4" class="dilution"/></td><td><a href="#">Delete</a></td></tr>');
+    $('#newstep').on('click', function(e) {
+        e.preventDefault();
+        $('#steps table').append('<tr class="step"><td><input type="text" value="2" placeholder="Developing" class="name"/></td><td><input type="time" value="" class="duration"/></td><td><input type="number" value="4" placeholder="21" class="temperature"/></td><td><input type="time" value="" class="interval"/></td><td><select class="chemical"><option value="A">A</option><option value="B">B</option><option value="C">C</option><option value="water">Water</option></select></td><td><input type="text" value="TEST2:DILUTION" placeholder="1:4" class="dilution"/></td><td><a href="#" class="deleteStep"><i class="fa fa-trash-o"></i></a></td></tr>');
+
     });
 
     $('#submitProcess').on('click', function(e) {
@@ -29,16 +31,19 @@ $(function() {
                 data: steps
             }),
             contentType: 'application/json; charset=utf-8',
-            dataType: 'json'
+            dataType: 'json',
+            success: function(data) {
+                console.log("data" + JSON.stringify(data));
+            }
         }).done(function(data) {
+            console.log("added");
+            alert("successfully added new process");
             console.log("send data: " + data);
         });
     });
 
     $('.process').on('click', function() {
         var processid = $(this).find('a').attr('id');
-
-
 
         var urlString = '../steps/'.concat(processid);
         var parent = $(this).parent();
@@ -86,9 +91,15 @@ $(function() {
         });
     });
 
+    // Hide process when deleting
+    $('.delete').on('click', function() {
+        var id = $(this).parent().find('a').attr('id');
+        $("#process".concat(id)).hide();
+    });
 
-
-
-
-
+    // Delegated event to delete steps in a process (including appended steps)
+    $('#steps').on('click', '.deleteStep', function(e) {
+        e.preventDefault();
+        $(this).parent().parent().remove();
+    });
 });
