@@ -61,7 +61,7 @@ app.post('/newfilm', function(req, res) {
 	if(name !== "" && iso !== 0 && manufacturer !== "") {
 		db.serialize(function() {
 			db.each("INSERT INTO films(film_name, iso, manufacturer) VALUES ($name, $iso, $manufacturer)", {$name: name, $iso: iso, $manufacturer: manufacturer}, function() {
-				res.redirect('/');
+				res.redirect('../');
 			});
 		});
 	}
@@ -85,6 +85,7 @@ app.post('/addprocess/:id', function(req, res) {
 					lastProcessId = this.lastID;
 					for(var i = 0; i < steps.length; i++) {
 						db.run("INSERT INTO steps(process_id, step_name, step_time, temp, interval, chemical, dilution) VALUES ($process_id, $name, $time, $temp, $interval, $chemical, $dilution)", {$process_id: lastProcessId, $name: steps[i].name, $time: steps[i].duration, $temp: steps[i].temperature, $interval: steps[i].interval, $chemical: steps[i].chemical, $dilution: steps[i].dilution });
+						// res.redirect('../../');
 					}
 				});
 			}
