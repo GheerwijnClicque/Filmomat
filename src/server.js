@@ -133,22 +133,33 @@ app.get('/processes/delete/:id', function(req, res) {
 	});
 });
 
-// app.get('/film/delete/:id', function(req, res) {
-// 	console.log("delete film: " + req.params.id);
-// 	var filmid = req.params.id;
-// 	db.serialize(function() {
-// 		db.run("DELETE FROM FILMS WHERE id = $id", {$id: filmid}, function(error, row) {
-// 			console.log(this.changes);
-// 		});
-// 		db.run("DELETE FROM PROCESSES WHERE film_id = $id", {$id: filmid}, function(error, row) {
-// 			console.log(row);
-// 			console.log(this.changes);
-// 		});
-// 		db.run("", {$id: filmid}, function(error, row) {
-// 			console.log(this.changes);
-// 		});
-// 	});
-// });
+app.get('/film/delete/:id', function(req, res) {
+	console.log("delete film: " + req.params.id);
+	var filmid = req.params.id;
+
+	db.serialize(function() {
+		db.all('SELECT processid FROM PROCESSES WHERE film_id = $id', {$id: filmid}, function(error, rows) {
+			rows.forEach(function(row) {
+				db.run("DELETE FROM PROCESSES WHERE processid = $id", {$id: row.processid}, function(error, row) {
+					console.log(this.changes);
+				});
+				db.run("DELETE FROM STEPS WHERE process_id = $id", {$id: row.processid}, function(error, row) {
+					console.log(this.changes);
+				});
+			});
+		});
+
+		db.run("DELETE FROM FILMS WHERE id = $id", {$id: filmid}, function(error, row) {
+			console.log(this.changes);
+		});
+
+		// db.run("DELETE FROM PROCESSES WHERE film_id = $id", {$id: filmid}, function(error, row) {
+		// 	console.log(row);
+		// 	console.log(this.changes);
+		// });
+
+	});
+});
 
 var server = app.listen(config.port, function() {
 	console.log('Express server listening on port ' + config.port);
