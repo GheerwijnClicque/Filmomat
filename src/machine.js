@@ -1,7 +1,10 @@
 var five = require('johnny-five');
 var board = new five.Board(); // {port: 'com4'}
+var io;
 
 var machine = function() {};
+
+machine.prototype.time = 0;
 
 machine.prototype.init = function() {
 	board.on('ready', function() {
@@ -23,13 +26,7 @@ machine.prototype.start = function(steps) {
 		// console.log("step: " + i + " = " + stepname + ", " + duration + ", " + temperature + ", " + interval + ", " + chemical);
 		execute(allSteps[i]);
 	}
-	io.sockets.on('connection', function(socket) {
-		// socket.emit('message', {message: 'welcome to the page'});
-		for(var i = 0; i < 100; i++) {
-			io.sockets.emit('message', {message: i});
 
-		}
-	});
 };
 
 //
@@ -43,49 +40,63 @@ var execute = function(step) {
 	console.log("executing step " + step.step_name + " (" + step.step_id + ")");
 	if(step.step_time !== "" && step.interval !== "") {
 		moveChemical(step.chemical);
-		// var duration = step.step_time.toSeconds();
-		// var interval = step.interval.toSeconds();
+		var duration = step.step_time.toSeconds();
+		var interval = step.interval.toSeconds();
+
+		console.log('duration: ' + duration + " interval: " + interval);
 		// startTimer(duration, interval);
-		startTimer(120, step.interval);
 	}
 };
 
 var startTimer = function(duration, interval) {
-	var start = Date.now(), diff, minutes, seconds;
-	var int = 0;
+	var interv;
 
-	function timer() {
-		diff = duration - (((Date.now() - start) / 1000) | 0);
+	io.sockets.on('connection', function(socket) {
+		var start = Date.now(), diff, minutes, seconds;
+		var int = 0;
+		var string = "";
 
-		minutes = (diff / 60) | 0;
-		seconds = (diff % 60) | 0;
+		function timer() {
+			diff = duration - (((Date.now() - start) / 1000) | 0);
 
-		minutes = minutes < 10 ? "0" + minutes : minutes;
-		seconds = seconds < 10 ? "0" + seconds : seconds;
+			minutes = (diff / 60) | 0;
+			seconds = (diff % 60) | 0;
 
-		console.log("time: " + minutes + ":" + seconds);
-		console.log(int);
-		if(diff <= 0) {
-			start = Date.now() + 1000;
+			minutes = minutes < 10 ? "0" + minutes : minutes;
+			seconds = seconds < 10 ? "0" + seconds : seconds;
+
+			string = minutes.toString() + ":" + seconds.toString();
+			// Send update to page
+			io.sockets.emit('message', {message: string});
+
+			if(diff <= 0) {
+				start = Date.now() + 1000;
+			}
+			if(int == interval) {
+				console.log("agitate!");
+				toggleRelay("agitate"); // make agitate function
+				int = 0;
+			}
+			if(minutes === "00" && seconds === "00") {
+				clearInterval(interv);
+			}
+			int++;
 		}
-		if(int === interval) {
-			console.log("agitate!");
-			toggleRelais("agitate");
-			int = 0;
-		}
 
-		int ++;
-	}
-	// timer();
-	setInterval(timer, 1000);
+		// timer();
+		interv = setInterval(timer, 1000);
+	});
 };
 
 var moveChemical = function() {
 
 };
 
-var toggleRelais = function(action) {
+var toggleRelay = function(action) {
 
 };
 
-module.exports = new machine();
+module.exports = function(socket_io) {
+	io = socket_io;
+	return new machine();
+};

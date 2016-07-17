@@ -8,8 +8,10 @@ var sqlite3 = require('sqlite3').verbose();
 var db = new sqlite3.Database('filmomat.db');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
-var machine = require('./machine.js');
 var io = require('socket.io').listen(app.listen(config.port));
+var machine = require('./machine.js')(io);
+
+
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -174,19 +176,8 @@ app.get('/processes/start/:id', function(req, res) {
 		});
 	});
 
-	io.sockets.on('connection', function(socket) {
-		// socket.emit('message', {message: 'welcome to the page'});
-		for(var i = 0; i < 100; i++) {
-			io.sockets.emit('message', {message: i});
-
-		}
-	});
-
 	res.render('executing');
 });
-
-
-
 
 
 // var server = app.listen(config.port, function() {

@@ -1,0 +1,42 @@
+#step {
+    margin-top: 2rem;
+    color: #5C6D7E;
+}
+
+#time {
+    font-size: 50px;
+    color: #5C6D7E;
+}
+
+.spinner{
+    width: 140px;
+    height: 140px;
+    border: 8px solid #f3f3f3;
+    border-top: 8px solid #f25a41;
+    border-radius: 100%;
+    margin: auto;
+    animation: spin 2s infinite linear;
+}
+
+@keyframes spin {
+    from{
+        transform: rotate(0deg);
+    }to{
+        transform: rotate(360deg);
+    }
+}
+
+#stop {
+    font-size: 20px;
+    margin-top: 2rem;
+    padding: 1rem 3rem;
+    background: rgba(0,0,0,0);
+    color: #5C6D7E;
+    border: solid 2px #5C6D7E;
+    -webkit-transition: all 0.5s;
+}
+
+#stop:hover {
+    background: #5C6D7E;
+    color: white;
+}
