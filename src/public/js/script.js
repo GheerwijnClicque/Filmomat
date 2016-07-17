@@ -12,9 +12,9 @@ $(function() {
         var steps = [];
         $('.step').each(function() {
             var name = $(this).find('.name').val();
-            var duration = $(this).find('.duration').val();
+            var duration = $(this).find('.duration').val() !== "" ? $(this).find('.duration').val() : "00:00";
             var temperature = $(this).find('.temperature').val();
-            var interval = $(this).find('.interval').val();
+            var interval = $(this).find('.interval').val() !== "" ? $(this).find('.interval').val() : "00:00";
             var chemical = $(this).find('.chemical').val();
             var dilution = $(this).find('.dilution').val();
 
@@ -107,4 +107,5 @@ $(function() {
         e.preventDefault();
         $(this).parent().parent().remove();
     });
+    
 });

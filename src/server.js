@@ -9,6 +9,7 @@ var db = new sqlite3.Database('filmomat.db');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var machine = require('./machine.js');
+var io = require('socket.io').listen(app.listen(config.port));
 
 app.set('views', __dirname + '/views');
 app.set('view engine', 'ejs');
@@ -162,6 +163,32 @@ app.get('/film/delete/:id', function(req, res) {
 	});
 });
 
-var server = app.listen(config.port, function() {
-	console.log('Express server listening on port ' + config.port);
+app.get('/processes/start/:id', function(req, res) {
+	var processid = req.params.id;
+	var steps = [];
+
+	db.serialize(function() {
+		db.all("SELECT * FROM STEPS where process_id = $id", {$id: processid} ,function(error, row) {
+			steps = row;
+			machine.start(JSON.stringify(steps));
+		});
+	});
+
+	io.sockets.on('connection', function(socket) {
+		// socket.emit('message', {message: 'welcome to the page'});
+		for(var i = 0; i < 100; i++) {
+			io.sockets.emit('message', {message: i});
+
+		}
+	});
+
+	res.render('executing');
 });
+
+
+
+
+
+// var server = app.listen(config.port, function() {
+// 	console.log('Express server listening on port ' + config.port);
+// });
