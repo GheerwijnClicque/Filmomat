@@ -113,3 +113,7 @@ li {
     float: right;
     width: 30%;
 }
+
+.deleteFilm {
+    float: left;
+}

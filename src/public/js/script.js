@@ -91,10 +91,15 @@ $(function() {
         });
     });
 
-    // Hide process when deleting
+    // Remove process when deleting
     $('.delete').on('click', function() {
         var id = $(this).parent().find('a').attr('id');
-        $("#process".concat(id)).hide();
+        $("#process".concat(id)).remove();
+    });
+
+    // Remove film when deleting
+    $('.deleteFilm').on('click', function() {
+        $(this).parent().parent().remove();
     });
 
     // Delegated event to delete steps in a process (including appended steps)
