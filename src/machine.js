@@ -3,6 +3,11 @@ var board = new five.Board(); // {port: 'com4'}
 var io;
 
 var machine = function() {};
+var A = [1, 2, 3]; // pin numbers for valves
+var B = [4, 5, 6];
+var C = [7, 8, 9];
+var Water = [10, 11, 12];
+var pump = 13;
 
 machine.prototype.time = 0;
 
@@ -44,7 +49,8 @@ var execute = function(step) {
 		var interval = step.interval.toSeconds();
 
 		console.log('duration: ' + duration + " interval: " + interval);
-		// startTimer(duration, interval);
+		startTimer(duration, interval);
+		chemicalToTank('A');
 	}
 };
 
@@ -67,14 +73,15 @@ var startTimer = function(duration, interval) {
 
 			string = minutes.toString() + ":" + seconds.toString();
 			// Send update to page
-			io.sockets.emit('message', {message: string});
+			io.sockets.emit('time', {message: string});
+			io.sockets.emit('comment', {message: '...'});
 
 			if(diff <= 0) {
 				start = Date.now() + 1000;
 			}
 			if(int == interval) {
+				io.sockets.emit('comment', {message: 'agitate!'});
 				console.log("agitate!");
-				toggleRelay("agitate"); // make agitate function
 				int = 0;
 			}
 			if(minutes === "00" && seconds === "00") {
@@ -92,7 +99,14 @@ var moveChemical = function() {
 
 };
 
-var toggleRelay = function(action) {
+var chemicalToTank = function(chemical) {
+	board.on('ready', function() {
+		var relay = new five.Relay({pin: 12});
+		relay.on();
+	});
+};
+
+var tankToWaste = function() {
 
 };
 
