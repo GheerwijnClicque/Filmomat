@@ -9,7 +9,7 @@ var db = new sqlite3.Database('filmomat.db');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var io = require('socket.io').listen(app.listen(config.port));
-var machine = require('./machine.js')(io);
+var machine = require('./machineNEW.js')(io);
 
 
 
@@ -21,6 +21,13 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
 machine.init();
+
+machine.on('stepDone', function(message) {
+	console.log(message);
+	console.log('sure it prints');
+})
+
+var index = 0;
 
 app.get('/', function(req, res) {
 	var getRow = undefined;
