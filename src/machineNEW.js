@@ -1,7 +1,7 @@
 var util = require('util');
 var five = require('johnny-five');
 var EventEmitter = require('events').EventEmitter;
-var board = new five.Board({port: 'com7'}); // {port: 'com4'}
+var board = new five.Board(); // {port: 'com4'}
 var io;
 
 var machine = new EventEmitter();
