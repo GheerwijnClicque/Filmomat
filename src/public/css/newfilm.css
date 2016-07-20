@@ -57,3 +57,72 @@ form input[type=submit] {
 form input[type=submit]:hover {
     background-color: #45a049;
 }
+
+@media only screen and (min-device-width : 320px) and (max-device-width : 568px) {
+    #content {
+        width: 100%;
+    }
+
+    form ul {
+        padding-left: 0rem;
+    }
+
+    form li {
+
+    padding: 0.5rem;
+    }
+
+    form p{
+        width: 30%;
+        float: left;
+    }
+
+    form input[type=text], input[type=number] {
+        width: 50%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    form select {
+        width: 100%;
+        height: 2.6rem;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    input[type=time] {
+        width: 100%;
+        padding: 12px 20px;
+        margin: 8px 0;
+        display: inline-block;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    form input[type=submit] {
+        width: 90%;
+        background-color: #4CAF50;
+        color: white;
+        padding: 14px 20px;
+        margin: 8px 0;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+
+        margin-left: -1rem;
+    }
+
+    form input[type=submit]:hover {
+        background-color: #45a049;
+    }
+
+}

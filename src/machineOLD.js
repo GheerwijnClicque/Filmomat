@@ -4,7 +4,6 @@ var board = new five.Board(); // {port: 'com4'}
 var io;
 
 var machine = function() {};
-var ee = new EventEmitter();
 
 var A = [1, 2, 3]; // pin numbers for valves
 var B = [4, 5, 6];
@@ -32,17 +31,7 @@ machine.prototype.start = function(steps) {
 		// var chemical = allSteps[i].chemical;
 		//
 		// console.log("step: " + i + " = " + stepname + ", " + duration + ", " + temperature + ", " + interval + ", " + chemical);
-
-		console.log("executing step " + allSteps[i].step_name + " (" + allSteps[i].step_id + ")");
-		if(allSteps[i].step_time !== "" && allSteps[i].interval !== "") {
-			moveChemical(allSteps[i].chemical);
-			var duration = allSteps[i].step_time.toSeconds();
-			var interval = allSteps[i].interval.toSeconds();
-
-			console.log('duration: ' + duration + " interval: " + interval);
-			ee.emit('startTimer', duration, interval);
-		}
-		// ee.emit('execute', allSteps[i]);
+		execute(allSteps[i]);
 	}
 
 };
@@ -55,21 +44,16 @@ String.prototype.toSeconds = function () {
 };
 
 var execute = function(step) {
-	// console.log("executing step " + step.step_name + " (" + step.step_id + ")");
-	// if(step.step_time !== "" && step.interval !== "") {
-	// 	moveChemical(step.chemical);
-	// 	var duration = step.step_time.toSeconds();
-	// 	var interval = step.interval.toSeconds();
-	//
-	// 	console.log('duration: ' + duration + " interval: " + interval);
-	// 	ee.emit('startTimer', duration, interval);
-	//
-	//
-	//
-	//
-	// 	// startTimer(duration, interval);
-	// 	// chemicalToTank('A');
-	// }
+	console.log("executing step " + step.step_name + " (" + step.step_id + ")");
+	if(step.step_time !== "" && step.interval !== "") {
+		moveChemical(step.chemical);
+		var duration = step.step_time.toSeconds();
+		var interval = step.interval.toSeconds();
+
+		console.log('duration: ' + duration + " interval: " + interval);
+		startTimer(duration, interval);
+		chemicalToTank('A');
+	}
 };
 
 var startTimer = function(duration, interval) {
@@ -103,7 +87,6 @@ var startTimer = function(duration, interval) {
 				int = 0;
 			}
 			if(minutes === "00" && seconds === "00") {
-				console.log('timer done!');
 				clearInterval(interv);
 			}
 			int++;
@@ -113,17 +96,6 @@ var startTimer = function(duration, interval) {
 		interv = setInterval(timer, 1000);
 	});
 };
-
-ee.on('startTimer', function(duration, interval) {
-	startTimer(duration, interval);
-});
-
-// ee.on('execute', function(step) {
-// 	execute(step);
-// });
-
-
-
 
 var moveChemical = function() {
 
