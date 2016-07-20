@@ -25,6 +25,7 @@ machine.init();
 machine.on('stepDone', function(message) {
 	console.log(message);
 	console.log('sure it prints');
+	machine.nextStep();
 })
 
 var index = 0;

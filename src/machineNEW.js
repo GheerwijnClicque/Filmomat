@@ -40,7 +40,6 @@ machine.nextStep = function() {
 		setTimeout(function() {
 			ee.emit('interval');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
-		console.log(machine.steps[machine.stepNumber].step_time.toMiliSeconds());
 		ee.on('interval', function() {
 			setTimeout(function() {
 				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
