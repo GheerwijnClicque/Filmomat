@@ -48,6 +48,7 @@ machine.nextStep = function() {
 		// set timeout for duration of step till interval, will emit code to start interval.
 		setTimeout(function() {
 			// Code before interval is placed here
+			console.log('step; ' + machine.steps[machine.stepNumber].step_name);
 			ee.emit('interval');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
 
@@ -65,7 +66,7 @@ machine.nextStep = function() {
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');
-		console.log('done');
+		console.log('process done');
 	}
 
 };
