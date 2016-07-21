@@ -20,6 +20,18 @@ String.prototype.toMiliSeconds = function () {
 	return (+time[0]) * 60 + (+time[1] || 0) * 1000;
 };
 
+// function after interval and before next step
+ee.on('interval', function() {
+	setTimeout(function() {
+		// code after interval and before next step
+
+		// increment step
+		machine.stepNumber++;
+		// emit event
+		machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+	}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
+});
+
 // function to init the board
 machine.init = function() {
 	board.on('ready', function() {
@@ -52,17 +64,7 @@ machine.nextStep = function() {
 			ee.emit('interval');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
 
-		// function after interval and before next step
-		ee.on('interval', function() {
-			setTimeout(function() {
-				// code after interval and before next step
 
-				// increment step
-				machine.stepNumber++;
-				// emit event
-				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-			}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
-		});
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');

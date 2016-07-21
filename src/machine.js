@@ -47,7 +47,6 @@ machine.prototype.start = function(steps) {
 
 };
 
-//
 String.prototype.toSeconds = function () {
 	if (!this) return null;
 	var time = this.split(':');
@@ -121,9 +120,6 @@ ee.on('startTimer', function(duration, interval) {
 // ee.on('execute', function(step) {
 // 	execute(step);
 // });
-
-
-
 
 var moveChemical = function() {
 
