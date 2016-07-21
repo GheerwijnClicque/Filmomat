@@ -13,46 +13,62 @@ var C = [7, 8, 9];
 var Water = [10, 11, 12];
 var pump = 13;
 
+// function to get miliseconds from string
 String.prototype.toMiliSeconds = function () {
 	if (!this) return null;
 	var time = this.split(':');
 	return (+time[0]) * 60 + (+time[1] || 0) * 1000;
 };
 
+// function to init the board
 machine.init = function() {
 	board.on('ready', function() {
 		// set everything
+		machine.emit('ready');
 		console.log('everything set');
 	});
 };
 
+// function to start the process
 machine.start = function(steps) {
-	console.log('it started');
+	console.log('process started');
 	machine.stepNumber = 0;
 	machine.steps = JSON.parse(steps);
-	console.log(machine.steps);
+	// emit outside that it started
+	machine.emit('started');
 	machine.nextStep();
 };
 
+// function to start next step
 machine.nextStep = function() {
+	// check if stepnumber isn't to high
 	if (machine.stepNumber < machine.steps.length) {
-		console.log('next step');
+		// code for the step
+
+		// set timeout for duration of step till interval, will emit code to start interval.
 		setTimeout(function() {
+			// Code before interval is placed here
 			ee.emit('interval');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
+
+		// function after interval and before next step
 		ee.on('interval', function() {
 			setTimeout(function() {
-				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+				// code after interval and before next step
+
+				// increment step
 				machine.stepNumber++;
+				// emit event
+				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
 			}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
 		});
 	} else {
+		// on the end, event when done
+		machine.emit('processDone');
 		console.log('done');
 	}
 
 };
-
-
 
 module.exports = function() {
 	return machine;

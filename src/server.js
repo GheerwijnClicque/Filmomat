@@ -20,11 +20,12 @@ app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 
+// init the machine
 machine.init();
 
+// when a step is done, log it and execute the next one
 machine.on('stepDone', function(message) {
 	console.log(message);
-	console.log('sure it prints');
 	machine.nextStep();
 })
 
@@ -57,7 +58,6 @@ app.get('/', function(req, res) {
 		});
 	});
 });
-
 
 // Add new film
 app.get('/newfilm', function(req, res) {
@@ -186,7 +186,6 @@ app.get('/processes/start/:id', function(req, res) {
 
 	res.render('executing');
 });
-
 
 // var server = app.listen(config.port, function() {
 // 	console.log('Express server listening on port ' + config.port);
