@@ -13,6 +13,29 @@ var C = [7, 8, 9];
 var Water = [10, 11, 12];
 var pump = 13;
 
+var start = undefined;
+var type = undefined;
+
+machine.getInfo = function() {
+	if (machine.steps !== undefined) {
+		if (type === 'Process') {
+			return {
+				start: start,
+				time: machine.steps[machine.stepNumber].step_time,
+				desc: machine.steps[machine.stepNumber].step_name
+			}
+		} else if (type === 'Interval') {
+			return {
+				start: start,
+				time: machine.steps[machine.stepNumber].interval,
+				desc: 'interval'
+			}
+		} else {
+
+		}
+	}
+}
+
 // function to get miliseconds from string
 String.prototype.toMiliSeconds = function () {
 	if (!this) return null;
@@ -22,6 +45,9 @@ String.prototype.toMiliSeconds = function () {
 
 // function after interval and before next step
 ee.on('interval', function() {
+	start = Date.now();
+	type = 'Interval';
+	machine.emit('change', machine.getInfo());
 	setTimeout(function() {
 		// code after interval and before next step
 
@@ -46,6 +72,7 @@ machine.start = function(steps) {
 	console.log('process started');
 	machine.stepNumber = 0;
 	machine.steps = JSON.parse(steps);
+	console.log(steps);
 	// emit outside that it started
 	machine.emit('started');
 	machine.nextStep();
@@ -56,7 +83,9 @@ machine.nextStep = function() {
 	// check if stepnumber isn't to high
 	if (machine.stepNumber < machine.steps.length) {
 		// code for the step
-
+		start = Date.now();
+		type = 'Process';
+		machine.emit('change', machine.getInfo());
 		// set timeout for duration of step till interval, will emit code to start interval.
 		setTimeout(function() {
 			// Code before interval is placed here

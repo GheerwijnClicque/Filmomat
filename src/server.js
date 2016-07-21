@@ -27,7 +27,11 @@ machine.init();
 machine.on('stepDone', function(message) {
 	console.log(message);
 	machine.nextStep();
-})
+});
+
+machine.on('change', function(e) {
+	console.log(e);
+});
 
 var index = 0;
 
