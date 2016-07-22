@@ -25,12 +25,30 @@ machine.init();
 
 // when a step is done, log it and execute the next one
 machine.on('stepDone', function(message) {
-	console.log(message);
+	console.log("stepdone message: " + message);
+
 	machine.nextStep();
 });
 
+machine.on('processDone', function() {
+	io.sockets.emit('processDone', {state: true});
+});
+
+// io.sockets.on('connection', function(socket) {
+//
+// });
+
+
+
 machine.on('change', function(e) {
-	console.log(e);
+	console.log('connection');
+	// io.sockets.on('connection', function(socket) {
+	// 	socket.emit('step', {message: e});
+	//
+	// });
+	io.sockets.emit('step', {message: e});
+
+	console.log('change: ' + e.time);
 });
 
 var index = 0;
@@ -76,9 +94,10 @@ app.post('/newfilm', function(req, res) {
 	if(name !== "" && iso !== 0 && manufacturer !== "") {
 		db.serialize(function() {
 			db.each("INSERT INTO films(film_name, iso, manufacturer) VALUES ($name, $iso, $manufacturer)", {$name: name, $iso: iso, $manufacturer: manufacturer}, function() {
-				res.redirect('../');
+
 			});
 		});
+		res.redirect('/');
 	}
 });
 
@@ -91,6 +110,7 @@ app.post('/addprocess/:id', function(req, res) {
 	var steps = req.body.data;
 	var processName = req.body.name;
 	var lastProcessId = 0;
+	var succes = false;
 
 	var filmId = req.params.id;
 	db.serialize(function() {
@@ -100,17 +120,20 @@ app.post('/addprocess/:id', function(req, res) {
 					lastProcessId = this.lastID;
 					for(var i = 0; i < steps.length; i++) {
 						db.run("INSERT INTO steps(process_id, step_name, step_time, temp, interval, chemical, dilution) VALUES ($process_id, $name, $time, $temp, $interval, $chemical, $dilution)", {$process_id: lastProcessId, $name: steps[i].name, $time: steps[i].duration, $temp: steps[i].temperature, $interval: steps[i].interval, $chemical: steps[i].chemical, $dilution: steps[i].dilution });
-						// res.redirect('../../');
+						succes = true;
 					}
 				});
 			}
 			else {
 				console.log("already exists");
+				succes = false;
 				// not working
 				// res.send('Process name already exists!');
 			}
 		});
 	});
+	res.redirect('/');
+
 });
 
 // Add new process for film
