@@ -30,7 +30,7 @@ machine.getInfo = function() {
 String.prototype.toMiliSeconds = function () {
 	if (!this) return null;
 	var time = this.split(':');
-	return (+time[0]) * 60 + (+time[1] || 0) * 1000;
+	return (+time[0]) * 60000 + (+time[1] || 0) * 1000;
 };
 
 // function after interval and before next step
