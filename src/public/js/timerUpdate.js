@@ -41,8 +41,9 @@ $(function() {
 
             // console.log('duration: ' + duration + ' inter: ');
 
+			console.log(data.message.time);
             // var counter = new Countdown({
-            //     seconds: duration,  // number of seconds to count down
+            //     seconds:  data.message.time,  // number of seconds to count down
             //     onUpdate: function(sec) {
             //         // console.log(sec);
             //         var minutes = "0" + Math.floor(sec / 60);
@@ -51,7 +52,7 @@ $(function() {
             //     }, // callback for each second
             //     done: function() { console.log('counter ended!'); } // final action
             // });
-            //
+			//
             // counter.start();
         }
         else {
