@@ -14,26 +14,15 @@ var Water = [10, 11, 12];
 var pump = 13;
 
 var start = undefined;
-var type = undefined;
 
 machine.getInfo = function() {
 	if (machine.steps !== undefined) {
-		if (type === 'Process') {
-			return {
-				start: start,
-				time: machine.steps[machine.stepNumber].step_time,
-				desc: machine.steps[machine.stepNumber].step_name,
-				interval: machine.steps[machine.stepNumber].interval
-			};
-		} else if (type === 'Interval') {
-			return {
-				start: start,
-				time: machine.steps[machine.stepNumber].interval,
-				desc: 'interval'
-			};
-		} else {
-
-		}
+		return {
+			start: start,
+			time: machine.steps[machine.stepNumber].step_time,
+			desc: machine.steps[machine.stepNumber].step_name,
+			interval: machine.steps[machine.stepNumber].interval
+		};
 	}
 };
 
@@ -45,28 +34,28 @@ String.prototype.toMiliSeconds = function () {
 };
 
 // function after interval and before next step
-ee.on('interval', function() {
-	start = Date.now();
-	// type = 'Interval';
-	// machine.emit('change', machine.getInfo());
-
-	// increment step
-	machine.stepNumber++;
-	// emit event
-	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-
-
-
-
-	// setTimeout(function() {
-	// 	// code after interval and before next step
-	//
-	// 	// increment step
-	// 	machine.stepNumber++;
-	// 	// emit event
-	// 	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-	// }, machine.steps[machine.stepNumber].interval.toMiliSeconds());
-});
+// ee.on('interval', function() {
+// 	start = Date.now();
+// 	// type = 'Interval';
+// 	// machine.emit('change', machine.getInfo());
+//
+// 	// increment step
+// 	machine.stepNumber++;
+// 	// emit event
+// 	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+//
+//
+//
+//
+// 	// setTimeout(function() {
+// 	// 	// code after interval and before next step
+// 	//
+// 	// 	// increment step
+// 	// 	machine.stepNumber++;
+// 	// 	// emit event
+// 	// 	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+// 	// }, machine.steps[machine.stepNumber].interval.toMiliSeconds());
+// });
 
 // function to init the board
 machine.init = function() {
@@ -105,9 +94,9 @@ machine.start = function(steps) {
 
 };
 
-machine.on('interval', function() {
-	console.log('agitate');
-});
+// machine.on('interval', function() {
+// 	console.log('agitate');
+// });
 
 function timer(callback, delay) {
     var id, started, remaining = delay, running;
@@ -145,39 +134,33 @@ var time;
 
 // function to start next step
 machine.nextStep = function() {
-	var inter;
+	// var inter;
 	// check if stepnumber isn't to high
 	if (machine.stepNumber < machine.steps.length) {
-		// code for the step
+		// set new start date
 		start = Date.now();
-		type = 'Process';
+
+		// emit new step info
 		machine.emit('change', machine.getInfo());
 
+		// set interval to agitate
 		var interval = setInterval(function() {console.log('agitate');}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
-		io.sockets.on('connection', function() {
 
-			inter = setInterval(function() {
-					console.log(time.getTimeLeft());
-					io.sockets.emit('step', {message: time.getTimeLeft()});
-
-			}, 1000);
-		});
-
-		// set timeout for duration of step till interval, will emit code to start interval.
+		// set function to end step
 		time = new timer(function() {
-			// Code before interval is placed here
+			console.log(machine.steps[machine.stepNumber]);
 			console.log('step: ' + machine.steps[machine.stepNumber].step_name);
 
 			clearInterval(interval);
-			ee.emit('interval');
+			machine.stepNumber++;
+			machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
-
-
 
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');
-		clearInterval(inter);
+		stepNumber = 0;
+		// clearInterval(inter);
 		console.log('process done');
 	}
 
@@ -194,7 +177,7 @@ machine.nextStep = function() {
 //    console.log("timeout: " + n);
 // }
 
-module.exports = function(socket_io) {
-	io = socket_io;
+module.exports = function() {
+	// io = socket_io;
 	return machine;
 };

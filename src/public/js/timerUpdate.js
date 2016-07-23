@@ -30,11 +30,11 @@ $(function() {
         if(data.message) {
             // $('#comment').text(data.message);
             console.log(data.message);
-            duration = Math.ceil((data.message / 1000));
-
-            var minutes = "0" + Math.floor(duration / 60);
-            var seconds = "0" + (duration - minutes * 60);
-            var time = minutes.substr(-2) + ":" + seconds.substr(-2);
+            // duration = Math.ceil((data.message / 1000));
+			//
+            // var minutes = "0" + Math.floor(duration / 60);
+            // var seconds = "0" + (duration - minutes * 60);
+            // var time = minutes.substr(-2) + ":" + seconds.substr(-2);
 
             $('#time').text(time);
             // interval = data.message.interval.toSeconds();

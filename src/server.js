@@ -9,7 +9,7 @@ var db = new sqlite3.Database('filmomat.db');
 var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var io = require('socket.io').listen(app.listen(config.port));
-var machine = require('./machineNEW.js')(io);
+var machine = require('./machineNEW.js')();
 
 
 
@@ -26,7 +26,6 @@ machine.init();
 // when a step is done, log it and execute the next one
 machine.on('stepDone', function(message) {
 	console.log("stepdone message: " + message);
-
 	machine.nextStep();
 });
 
@@ -34,9 +33,9 @@ machine.on('processDone', function() {
 	io.sockets.emit('processDone', {state: true});
 });
 
-// io.sockets.on('connection', function(socket) {
-//
-// });
+io.sockets.on('connection', function(socket) {
+	socket.emit('step', {message: machine.getInfo()});
+});
 
 
 
