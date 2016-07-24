@@ -1,4 +1,8 @@
 $(function() {
+	function str_pad_left(string,pad,length) {
+	    return (new Array(length+1).join(pad)+string).slice(-length);
+	}
+
     // Socket IO
     var socket = io.connect('http://localhost:3000');
 
@@ -29,31 +33,31 @@ $(function() {
     socket.on('step', function(data) {
         if(data.message) {
             // $('#comment').text(data.message);
-            console.log(data.message);
+            // console.log(data.message.desc);
+			$('#step').text('Executing "' + data.message.desc + '"');
             // duration = Math.ceil((data.message / 1000));
 			//
             // var minutes = "0" + Math.floor(duration / 60);
             // var seconds = "0" + (duration - minutes * 60);
             // var time = minutes.substr(-2) + ":" + seconds.substr(-2);
 
-            $('#time').text(time);
+            // $('#time').text(time);
             // interval = data.message.interval.toSeconds();
 
             // console.log('duration: ' + duration + ' inter: ');
 
-			console.log(data.message.time);
-            // var counter = new Countdown({
-            //     seconds:  data.message.time,  // number of seconds to count down
-            //     onUpdate: function(sec) {
-            //         // console.log(sec);
-            //         var minutes = "0" + Math.floor(sec / 60);
-            //         var seconds = "0" + (sec - minutes * 60);
-            //         console.log(minutes.substr(-2) + ":" + seconds.substr(-2));
-            //     }, // callback for each second
-            //     done: function() { console.log('counter ended!'); } // final action
-            // });
-			//
-            // counter.start();
+            var counter = new Countdown({
+                seconds:  data.message.time,  // number of seconds to count down
+                onUpdate: function(sec) {
+                    console.log(Math.round(sec));
+					var minutes = Math.floor(Math.round(sec) / 60);
+					var seconds = Math.round(sec) - (minutes * 60);
+					$('#time').text(str_pad_left(minutes,'0',2)+':'+str_pad_left(seconds,'0',2));
+                }, // callback for each second
+                done: function() { console.log('counter ended!'); } // final action
+            });
+
+            counter.start();
         }
         else {
             console.log('there is a problem: ', data.message);
@@ -89,18 +93,18 @@ function Countdown(options) {
 
   function decrementCounter() {
     updateStatus(seconds);
-    if (seconds === 0) {
+    if (Math.round(seconds) <= 0) {
       counterEnd();
       instance.stop();
     }
-    seconds--;
+    seconds -= 0.25;
   }
 
   this.start = function () {
     clearInterval(timer);
     timer = 0;
     seconds = options.seconds;
-    timer = setInterval(decrementCounter, 1000);
+    timer = setInterval(decrementCounter, 250);
   };
 
   this.stop = function () {

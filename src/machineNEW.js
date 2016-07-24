@@ -19,7 +19,7 @@ machine.getInfo = function() {
 	if (machine.steps !== undefined) {
 		return {
 			start: start,
-			time: machine.steps[machine.stepNumber].step_time.toMiliSeconds() / 1000,
+			time: (machine.steps[machine.stepNumber].step_time.toMiliSeconds() - (Date.now() - start)) / 1000,
 			desc: machine.steps[machine.stepNumber].step_name,
 			interval: machine.steps[machine.stepNumber].interval
 		};
