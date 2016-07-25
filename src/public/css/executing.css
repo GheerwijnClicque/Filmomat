@@ -40,3 +40,22 @@
     background: #5C6D7E;
     color: white;
 }
+
+#progressStep {
+    width: 80%;
+    height: 2rem;
+    background-color: #F24D16;
+}
+
+#progress {
+    width: 0%;
+    height: inherit;
+    background-color: #F24D16;
+}
+
+#progressBar {
+    margin: auto;
+    width: 50%;
+    height: 2rem;
+    background-color: #707070;
+}

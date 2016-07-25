@@ -83,7 +83,7 @@ $(function() {
                                   <td>' + steps[i].chemical + '</td> \
                                   <td>' + steps[i].dilution + '</td> \
                                 </tr>');
-                    console.log(steps[i]);
+                    // console.log(steps[i]);
                 }
 
                 parent.find("#steps_process".concat(processid)).attr("data", "show");

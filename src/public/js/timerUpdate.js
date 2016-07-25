@@ -6,53 +6,29 @@ $(function() {
     // Socket IO
     var socket = io.connect('http://localhost:3000');
 
-    // socket.on('time', function(data) {
-    //     if(data.message) {
-    //         console.log(data.message);
-    //         $('#time').text(data.message);
-    //     }
-    //     else {
-    //         console.log('there is a problem: ', data.message);
-    //     }
-    // });
-    //
-    // socket.on('comment', function(data) {
-    //     if(data.message) {
-    //         $('#comment').text(data.message);
-    //     }
-    //     else {
-    //         console.log('there is a problem: ', data.message);
-    //     }
-    // });
-
     var duration = 0;
     var start = Date.now(), diff, minutes, seconds, interv, interval;
     var int = 0;
     var string = "";
+
 
     socket.on('step', function(data) {
         if(data.message) {
             // $('#comment').text(data.message);
             // console.log(data.message.desc);
 			$('#step').text('Executing "' + data.message.desc + '"');
-            // duration = Math.ceil((data.message / 1000));
-			//
-            // var minutes = "0" + Math.floor(duration / 60);
-            // var seconds = "0" + (duration - minutes * 60);
-            // var time = minutes.substr(-2) + ":" + seconds.substr(-2);
-
-            // $('#time').text(time);
-            // interval = data.message.interval.toSeconds();
-
-            // console.log('duration: ' + duration + ' inter: ');
 
             var counter = new Countdown({
                 seconds:  data.message.time,  // number of seconds to count down
                 onUpdate: function(sec) {
-                    console.log(Math.round(sec));
+					var progress = 100 - Math.ceil((Math.round(sec) / Math.ceil(data.message.time)) * 100);
+
+					// console.log('progress = ' + progress + "%");
+
 					var minutes = Math.floor(Math.round(sec) / 60);
 					var seconds = Math.round(sec) - (minutes * 60);
 					$('#time').text(str_pad_left(minutes,'0',2)+':'+str_pad_left(seconds,'0',2));
+					progressBar(progress);
                 }, // callback for each second
                 done: function() { console.log('counter ended!'); } // final action
             });
@@ -69,6 +45,7 @@ $(function() {
         if(data.state) {
             // $('#comment').text(data.message);
             console.log('process finished');
+			$('#time').text('process finished');
         }
         else {
             console.log('there is a problem: ', data.message);
@@ -81,8 +58,17 @@ $(function() {
     	return (+time[0]) * 60 + (+time[1] || 0);
     };
 
-});
 
+
+	var progressBar = function(progress) {
+		$('#progress').width(progress + "%");
+	};
+
+
+
+
+
+});
 
 function Countdown(options) {
   var timer,

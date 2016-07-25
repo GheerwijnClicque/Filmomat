@@ -91,7 +91,24 @@ machine.start = function(steps) {
 	// emit outside that it started
 	machine.emit('started');
 	machine.nextStep();
+};
 
+machine.isRunning = function() {
+	// console.log('running?: ' + time.getStateRunning());
+	if(time !== undefined) {
+		if(!time.getStateRunning()) {
+			console.log('machine is not running');
+			return false;
+		}
+		else if(time.getStateRunning()){
+			console.log('machine is running');
+			return true;
+		}
+	}
+	else {
+		console.log('timer not started!');
+		return false;
+	}
 };
 
 // machine.on('interval', function() {
@@ -130,8 +147,6 @@ function timer(callback, delay) {
 }
 
 var time;
-
-
 // function to start next step
 machine.nextStep = function() {
 	// var inter;
@@ -156,6 +171,9 @@ machine.nextStep = function() {
 			machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
 
+
+
+
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');
@@ -165,6 +183,7 @@ machine.nextStep = function() {
 	}
 
 };
+
 
 // var n = 100;
 // setTimeout(countDown,1000);

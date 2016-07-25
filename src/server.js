@@ -82,7 +82,7 @@ app.get('/', function(req, res) {
 
 // Add new film
 app.get('/newfilm', function(req, res) {
-	res.render('newfilm', {});
+	res.render('newfilm');
 });
 
 app.post('/newfilm', function(req, res) {
@@ -206,7 +206,9 @@ app.get('/processes/start/:id', function(req, res) {
 	db.serialize(function() {
 		db.all("SELECT * FROM STEPS where process_id = $id", {$id: processid} ,function(error, row) {
 			steps = row;
-			machine.start(JSON.stringify(steps));
+			if(!machine.isRunning()) {
+				machine.start(JSON.stringify(steps));
+			}
 		});
 	});
 
