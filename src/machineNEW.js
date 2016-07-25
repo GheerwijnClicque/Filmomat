@@ -62,6 +62,7 @@ machine.init = function() {
 	board.on('ready', function() {
 		// set everything
 		machine.emit('ready');
+		printLCD('ready', 0);
 		console.log('everything set');
 	});
 
@@ -82,7 +83,7 @@ machine.start = function(steps) {
 	// 	machine.emit('started');
 	// 	machine.nextStep();
 	// });
-
+	printLCD("process started", 0);
 	console.log('process started');
 	machine.stepNumber = 0;
 	machine.steps = JSON.parse(steps);
@@ -179,6 +180,7 @@ machine.nextStep = function() {
 		machine.emit('processDone');
 		stepNumber = 0;
 		// clearInterval(inter);
+		printLCD("process finished", 0);
 		console.log('process done');
 	}
 
@@ -196,7 +198,12 @@ machine.nextStep = function() {
 //    console.log("timeout: " + n);
 // }
 
+var printLCD = function(text, line) {
+	var lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
+	lcd.cursor(line, 0).print(text);
+};
+
+
 module.exports = function() {
-	// io = socket_io;
 	return machine;
 };
