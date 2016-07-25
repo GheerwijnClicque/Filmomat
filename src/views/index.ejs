@@ -26,7 +26,7 @@
             <div id="films">
                 <ul>
                     <% films.forEach(function(film) { %>
-                        <li class="film"><span><a href="/processes/<%= film.id %>"><%= film.film_name %> <%= film.iso %></a><a href="/newprocess/<%= film.id %>" class="id"><i class="fa fa-plus" aria-hidden="true"></i></a><a href="film/delete/<%= film.id %>" class="deleteFilm"><i class="fa fa-trash-o"></i></a></span></li>
+                        <li class="film"><span><a href="/processes/<%= film.id %>"><%= film.film_name %> <%= film.iso %></a><a href="/newprocess/<%= film.id %>" class="id"><i class="fa fa-plus" aria-hidden="true"></i></a><a href="film/<%= film.id %>/delete" class="deleteFilm"><i class="fa fa-trash-o"></i></a></span></li>
                     <% }); %>
                 </ul>
 

@@ -107,6 +107,4 @@ $(function() {
         e.preventDefault();
         $(this).parent().parent().remove();
     });
-
-
 });

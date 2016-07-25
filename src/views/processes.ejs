@@ -30,7 +30,7 @@
                     <% if (processes.length > 0) { %>
                         <% processes.forEach(function(process) { %>
                             <div id="process<%= process.processid %>">
-                                <li class="film process"><span><a href="#" id="<%= process.processid %>"><%= process.process_name %> </a><a class="startProcess" href="start/<%= process.processid %>" id="start"><i class="fa fa-play" aria-hidden="true"></i></a><a href="delete/<%= process.processid %>" class="delete"><i class="fa fa-trash-o"></i></a></span></li>
+                                <li class="film process"><span><a href="#" id="<%= process.processid %>"><%= process.process_name %> </a><a class="startProcess" href="<%= process.processid %>/start" id="start"><i class="fa fa-play" aria-hidden="true"></i></a><a href="<%= process.processid %>/delete" class="delete"><i class="fa fa-trash-o"></i></a></span></li>
                                 <ul id="steps_process<%= process.processid %>" data="hide"  style="overflow-x:auto;"></ul>
                             </div>
                         <% }); %>

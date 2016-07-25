@@ -159,7 +159,7 @@ app.get('/steps/:processid', function(req, res) {
 	});
 });
 
-app.get('/processes/delete/:id', function(req, res) { // change to processes/:id/delete
+app.get('/processes/:id/delete', function(req, res) {
 	var processid = req.params.id;
 	db.parallelize(function() {
 		db.run("DELETE FROM PROCESSES WHERE processid = $id", {$id: processid}, function(error, row) {
@@ -171,7 +171,7 @@ app.get('/processes/delete/:id', function(req, res) { // change to processes/:id
 	});
 });
 
-app.get('/film/delete/:id', function(req, res) { // change to film/:id/delete
+app.get('/film/:id/delete', function(req, res) {
 	console.log("delete film: " + req.params.id);
 	var filmid = req.params.id;
 
@@ -199,7 +199,7 @@ app.get('/film/delete/:id', function(req, res) { // change to film/:id/delete
 	});
 });
 
-app.get('/processes/start/:id', function(req, res) { // change to processes/:id/start
+app.get('/processes/:id/start', function(req, res) { // change to processes/:id/start
 	var processid = req.params.id;
 	var steps = [];
 
@@ -215,8 +215,9 @@ app.get('/processes/start/:id', function(req, res) { // change to processes/:id/
 	res.render('executing');
 });
 
-app.get('/processes/stop/:id', function(req, res) { // change to processes/:id/stop
-
+app.get('/processes/:id/stop', function(req, res) { // change to processes/:id/stop
+	console.log("stop: " + req.params.id);
+	machine.stop();
 });
 // var server = app.listen(config.port, function() {
 // 	console.log('Express server listening on port ' + config.port);

@@ -33,6 +33,7 @@
     background: rgba(0,0,0,0);
     color: #5C6D7E;
     border: solid 2px #5C6D7E;
+    text-decoration: none;
     -webkit-transition: all 0.5s;
 }
 
@@ -58,4 +59,5 @@
     width: 50%;
     height: 2rem;
     background-color: #707070;
+    margin-bottom: 7rem;
 }

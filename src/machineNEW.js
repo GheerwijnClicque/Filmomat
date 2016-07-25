@@ -51,19 +51,6 @@ machine.init = function() {
 
 // function to start the process
 machine.start = function(steps) {
-	// io.on('connection', function(socket) {
-	// 	// socket.emit('step', {message: e});
-	// 	console.log('socket connection made');
-	//
-	// 	console.log('process started');
-	// 	machine.stepNumber = 0;
-	// 	machine.steps = JSON.parse(steps);
-	// 	// console.log("steps: " + steps);
-	//
-	// 	// emit outside that it started
-	// 	machine.emit('started');
-	// 	machine.nextStep();
-	// });
 	printLCD("process started", 0);
 	console.log('process started');
 	if(initialized) {
@@ -95,6 +82,18 @@ machine.isRunning = function() {
 	}
 };
 
+machine.stop = function() {
+	clearTimeout(time);
+	time.stop();
+	console.log('machine stop');
+};
+
+machine.pause = function() {
+	if(time !== undefined) {
+		time.pause();
+	}
+};
+
 ee.on('lcd', function() {
 	if(time !== undefined) {
 		milliToMinutes(time.getTimeLeft());
@@ -115,6 +114,11 @@ function timer(callback, delay) {
         clearTimeout(id);
         remaining -= new Date() - started;
     };
+
+	this.stop = function() {
+		running = false;
+		clearTimeout(id);
+	};
 
     this.getTimeLeft = function() {
         if (running) {
@@ -145,7 +149,9 @@ machine.nextStep = function() {
 		machine.emit('change', machine.getInfo());
 
 		// set interval to agitate
-		var interval = setInterval(function() {console.log('agitate');}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
+		var interval = setInterval(function() {
+			console.log('agitate');
+		}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
 
 
 		var lcdTime = setInterval(function() {
