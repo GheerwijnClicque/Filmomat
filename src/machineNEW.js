@@ -1,8 +1,11 @@
 var util = require('util');
 var five = require('johnny-five');
 var EventEmitter = require('events').EventEmitter;
-var board = new five.Board(); // {port: 'com4'}
+var board = new five.Board(), initialized; // {port: 'com4'}
+
+var lcd; // LCD
 var io;
+
 
 var machine = new EventEmitter();
 var ee = new EventEmitter();
@@ -33,39 +36,17 @@ String.prototype.toMiliSeconds = function () {
 	return (+time[0]) * 60000 + (+time[1] || 0) * 1000;
 };
 
-// function after interval and before next step
-// ee.on('interval', function() {
-// 	start = Date.now();
-// 	// type = 'Interval';
-// 	// machine.emit('change', machine.getInfo());
-//
-// 	// increment step
-// 	machine.stepNumber++;
-// 	// emit event
-// 	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-//
-//
-//
-//
-// 	// setTimeout(function() {
-// 	// 	// code after interval and before next step
-// 	//
-// 	// 	// increment step
-// 	// 	machine.stepNumber++;
-// 	// 	// emit event
-// 	// 	machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-// 	// }, machine.steps[machine.stepNumber].interval.toMiliSeconds());
-// });
-
 // function to init the board
 machine.init = function() {
 	board.on('ready', function() {
 		// set everything
+		lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
+
 		machine.emit('ready');
 		printLCD('ready', 0);
 		console.log('everything set');
+		initialized = true;
 	});
-
 };
 
 // function to start the process
@@ -85,13 +66,15 @@ machine.start = function(steps) {
 	// });
 	printLCD("process started", 0);
 	console.log('process started');
-	machine.stepNumber = 0;
-	machine.steps = JSON.parse(steps);
-	// console.log("steps: " + steps);
+	if(initialized) {
+		machine.stepNumber = 0;
+		machine.steps = JSON.parse(steps);
+		// console.log("steps: " + steps);
 
-	// emit outside that it started
-	machine.emit('started');
-	machine.nextStep();
+		// emit outside that it started
+		machine.emit('started');
+		machine.nextStep();
+	}
 };
 
 machine.isRunning = function() {
@@ -112,9 +95,11 @@ machine.isRunning = function() {
 	}
 };
 
-// machine.on('interval', function() {
-// 	console.log('agitate');
-// });
+ee.on('lcd', function() {
+	if(time !== undefined) {
+		milliToMinutes(time.getTimeLeft());
+	}
+});
 
 function timer(callback, delay) {
     var id, started, remaining = delay, running;
@@ -162,6 +147,12 @@ machine.nextStep = function() {
 		// set interval to agitate
 		var interval = setInterval(function() {console.log('agitate');}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
 
+
+		var lcdTime = setInterval(function() {
+			ee.emit('lcd');
+			printLCD(milliToMinutes(time.getTimeLeft()), 1);
+		}, 250);
+
 		// set function to end step
 		time = new timer(function() {
 			console.log(machine.steps[machine.stepNumber]);
@@ -180,29 +171,28 @@ machine.nextStep = function() {
 		machine.emit('processDone');
 		stepNumber = 0;
 		// clearInterval(inter);
+		lcd.clear();
 		printLCD("process finished", 0);
 		console.log('process done');
 	}
 
 };
 
-
-// var n = 100;
-// setTimeout(countDown,1000);
-//
-// function countDown(){
-//    n--;
-//    if(n > 0){
-// 	  setTimeout(countDown,1000);
-//    }
-//    console.log("timeout: " + n);
-// }
-
 var printLCD = function(text, line) {
-	var lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
 	lcd.cursor(line, 0).print(text);
 };
 
+var milliToMinutes = function(milliseconds) {
+	var min = Math.floor(Math.ceil(milliseconds / 1000) / 60);
+	var sec = Math.ceil((milliseconds / 1000) - (min * 60));
+	if(sec < 10) {
+		sec = "0" + sec;
+	}
+	if(min < 10) {
+		min = "0" + min;
+	}
+	return min + ':' + sec;
+};
 
 module.exports = function() {
 	return machine;
