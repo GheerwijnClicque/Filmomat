@@ -61,3 +61,13 @@
     background-color: #707070;
     margin-bottom: 7rem;
 }
+
+canvas {
+    margin: auto;
+    display: block;
+    margin-bottom: 3rem;
+}
+
+input {
+    width: 200px;
+}

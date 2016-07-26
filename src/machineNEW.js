@@ -39,11 +39,10 @@ String.prototype.toMiliSeconds = function () {
 // function to init the board
 machine.init = function() {
 	board.on('ready', function() {
-		// set everything
-		lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
+		// lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
 
 		machine.emit('ready');
-		printLCD('ready', 0);
+		// printLCD('ready', 0);
 		console.log('everything set');
 		initialized = true;
 	});
@@ -51,7 +50,7 @@ machine.init = function() {
 
 // function to start the process
 machine.start = function(steps) {
-	printLCD("process started", 0);
+	// printLCD("process started", 0);
 	console.log('process started');
 	if(initialized) {
 		machine.stepNumber = 0;
@@ -156,7 +155,7 @@ machine.nextStep = function() {
 
 		var lcdTime = setInterval(function() {
 			ee.emit('lcd');
-			printLCD(milliToMinutes(time.getTimeLeft()), 1);
+			// printLCD(milliToMinutes(time.getTimeLeft()), 1);
 		}, 250);
 
 		// set function to end step
@@ -178,15 +177,15 @@ machine.nextStep = function() {
 		stepNumber = 0;
 		// clearInterval(inter);
 		lcd.clear();
-		printLCD("process finished", 0);
+		// printLCD("process finished", 0);
 		console.log('process done');
 	}
 
 };
 
-var printLCD = function(text, line) {
-	lcd.cursor(line, 0).print(text);
-};
+// var printLCD = function(text, line) {
+// 	lcd.cursor(line, 0).print(text);
+// };
 
 var milliToMinutes = function(milliseconds) {
 	var min = Math.floor(Math.ceil(milliseconds / 1000) / 60);

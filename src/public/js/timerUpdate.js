@@ -29,6 +29,7 @@ $(function() {
 					var seconds = Math.round(sec) - (minutes * 60);
 					$('#time').text(str_pad_left(minutes,'0',2)+':'+str_pad_left(seconds,'0',2));
 					progressBar(progress);
+					draw(progress / 100);
                 }, // callback for each second
                 done: function() { console.log('counter ended!'); } // final action
             });
@@ -58,16 +59,42 @@ $(function() {
     	return (+time[0]) * 60 + (+time[1] || 0);
     };
 
-
-
 	var progressBar = function(progress) {
 		$('#progress').width(progress + "%");
 	};
 
 
+	// SVG circle
+	var range = document.getElementById('range');
+	var bg = document.getElementById('counter');
+	var ctx = bg.getContext('2d');
+	var imd = null;
+	var circ = Math.PI * 2;
+	var quart = Math.PI / 2;
 
+	ctx.beginPath();
+		ctx.strokeStyle = '#6e6e6e';
+		ctx.arc(120,120,70,0,2*Math.PI, false);
+		ctx.lineWidth = 12.0;
+		ctx.stroke();
+	ctx.closePath();
 
+	ctx.beginPath();
+		ctx.strokeStyle = '#F24D16';
+		ctx.lineCap = 'square';
+		ctx.stroke();
+	ctx.closePath();
 
+	ctx.fill();
+	ctx.lineWidth = 12.0;
+
+	imd = ctx.getImageData(0, 0, 240, 240);
+	var draw = function(current) {
+	    ctx.putImageData(imd, 0, 0);
+	    ctx.beginPath();
+	    ctx.arc(120, 120, 70, -(quart), ((circ) * current) - quart, false);
+	    ctx.stroke();
+	};
 });
 
 function Countdown(options) {
