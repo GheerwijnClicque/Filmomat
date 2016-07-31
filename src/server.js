@@ -206,9 +206,7 @@ app.get('/processes/:id/start', function(req, res) { // change to processes/:id/
 	db.serialize(function() {
 		db.all("SELECT * FROM STEPS where process_id = $id", {$id: processid} ,function(error, row) {
 			steps = row;
-			if(!machine.isRunning()) {
-				machine.start(JSON.stringify(steps));
-			}
+			machine.start(JSON.stringify(steps));
 		});
 	});
 

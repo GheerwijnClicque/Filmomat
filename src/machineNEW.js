@@ -16,7 +16,7 @@ var C = [7, 8, 9];
 var Water = [10, 11, 12];
 var pump = 13;
 
-var start = undefined;
+var start;
 
 machine.getInfo = function() {
 	if (machine.steps !== undefined) {
@@ -51,15 +51,15 @@ machine.init = function() {
 // function to start the process
 machine.start = function(steps) {
 	// printLCD("process started", 0);
-	console.log('process started');
-	if(initialized) {
-		machine.stepNumber = 0;
+	if(initialized && !machine.isRunning()) {
+		machine.stepNumber = -1;
 		machine.steps = JSON.parse(steps);
 		// console.log("steps: " + steps);
 
 		// emit outside that it started
 		machine.emit('started');
 		machine.nextStep();
+		console.log('process started');
 	}
 };
 
@@ -105,7 +105,10 @@ function timer(callback, delay) {
     this.start = function() {
         running = true;
         started = new Date();
-        id = setTimeout(callback, remaining);
+        id = setTimeout(function() {
+			running = false;
+			callback();
+		}, remaining);
     };
 
     this.pause = function() {
@@ -138,8 +141,13 @@ function timer(callback, delay) {
 var time;
 // function to start next step
 machine.nextStep = function() {
+	machine.stepNumber++;
 	// var inter;
 	// check if stepnumber isn't to high
+	console.log('=====');
+	console.log(machine.stepNumber);
+	console.log(machine.steps.length);
+	console.log('=====');
 	if (machine.stepNumber < machine.steps.length) {
 		// set new start date
 		start = Date.now();
@@ -160,12 +168,13 @@ machine.nextStep = function() {
 
 		// set function to end step
 		time = new timer(function() {
-			console.log(machine.steps[machine.stepNumber]);
-			console.log('step: ' + machine.steps[machine.stepNumber].step_name);
+			if (machine.stepNumber < machine.steps.length) {
+				console.log(machine.stepNumber)
+				console.log('step: ' + machine.steps[machine.stepNumber].step_name);
 
-			clearInterval(interval);
-			machine.stepNumber++;
-			machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+				clearInterval(interval);
+				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+			}
 		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
 
 
@@ -174,9 +183,9 @@ machine.nextStep = function() {
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');
-		stepNumber = 0;
+		stepNumber = -1;
 		// clearInterval(inter);
-		lcd.clear();
+		// lcd.clear();
 		// printLCD("process finished", 0);
 		console.log('process done');
 	}
