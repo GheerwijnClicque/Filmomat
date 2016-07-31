@@ -10,11 +10,8 @@ var io;
 var machine = new EventEmitter();
 var ee = new EventEmitter();
 
-var A = [1, 2, 3]; // pin numbers for valves
-var B = [4, 5, 6];
-var C = [7, 8, 9];
-var Water = [10, 11, 12];
-var pump = 13;
+var A, B, C, water, pump, cleanup; // pin numbers for valves
+var temperature;
 
 var start;
 
@@ -42,6 +39,27 @@ machine.init = function() {
 		// lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
 
 		machine.emit('ready');
+
+		A = new five.Relays([2, 3, 4]);
+		B = new five.Relays([5, 6, 7]);
+		C = new five.Relays([8, 9, 10]);
+		water = new five.Relay(11);
+		cleanup = new five.Relay(12);
+
+		pump = new five.Relay(13);
+		A.close();
+		B.close();
+		C.close();
+		cleanup.close();
+		water.close();
+		pump.close();
+
+		// temperature = new five.Thermometer({
+	    //    controller: "DS18B20",
+	    //    pin: 14
+	    //  });
+
+
 		// printLCD('ready', 0);
 		console.log('everything set');
 		initialized = true;
@@ -61,10 +79,10 @@ machine.start = function(steps) {
 		machine.nextStep();
 		console.log('process started');
 	}
+
 };
 
 machine.isRunning = function() {
-	// console.log('running?: ' + time.getStateRunning());
 	if(time !== undefined) {
 		if(!time.getStateRunning()) {
 			console.log('machine is not running');
@@ -92,6 +110,58 @@ machine.pause = function() {
 		time.pause();
 	}
 };
+
+machine.prepare = function(step) {
+	prepareStep(machine.steps[machine.stepNumber]);
+};
+
+machine.cleanUp = function(time) {
+	console.log('cleaning up for ' + time / 1000 + ' seconds');
+	A = null;
+
+	cleanup.open();
+	pump.open();
+
+	// wait x seconds for cleaning to complete, could be setTimeout
+	board.wait((time), function() {
+		console.log('cleaning done');
+
+		cleanup.close();
+		pump.close();
+
+		machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
+	});
+};
+
+machine.on('setupDone', function() {
+	// set new start date
+	start = Date.now();
+
+	// emit new step info
+	machine.emit('change', machine.getInfo());
+
+	// set interval to agitate
+	var interval = setInterval(function() {
+		console.log('agitate');
+	}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
+
+	var lcdTime = setInterval(function() {
+		ee.emit('lcd');
+		// printLCD(milliToMinutes(time.getTimeLeft()), 1);
+	}, 250);
+
+	// set function to end step
+	time = new timer(function() {
+		if (machine.stepNumber < machine.steps.length) {
+			console.log(machine.stepNumber);
+			console.log('step: ' + machine.steps[machine.stepNumber].step_name);
+
+			clearInterval(interval);
+			// cleanup for x milliseconds
+			machine.cleanUp(10000);
+		}
+	}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
+});
 
 ee.on('lcd', function() {
 	if(time !== undefined) {
@@ -127,7 +197,6 @@ function timer(callback, delay) {
             this.pause();
             this.start();
         }
-
         return remaining;
     };
 
@@ -137,6 +206,8 @@ function timer(callback, delay) {
 
     this.start();
 }
+
+
 
 var time;
 // function to start next step
@@ -149,37 +220,9 @@ machine.nextStep = function() {
 	console.log(machine.steps.length);
 	console.log('=====');
 	if (machine.stepNumber < machine.steps.length) {
-		// set new start date
-		start = Date.now();
-
-		// emit new step info
-		machine.emit('change', machine.getInfo());
-
-		// set interval to agitate
-		var interval = setInterval(function() {
-			console.log('agitate');
-		}, machine.steps[machine.stepNumber].interval.toMiliSeconds());
-
-
-		var lcdTime = setInterval(function() {
-			ee.emit('lcd');
-			// printLCD(milliToMinutes(time.getTimeLeft()), 1);
-		}, 250);
-
-		// set function to end step
-		time = new timer(function() {
-			if (machine.stepNumber < machine.steps.length) {
-				console.log(machine.stepNumber)
-				console.log('step: ' + machine.steps[machine.stepNumber].step_name);
-
-				clearInterval(interval);
-				machine.emit('stepDone', 'step ' + machine.stepNumber + ' is done');
-			}
-		}, machine.steps[machine.stepNumber].step_time.toMiliSeconds());
-
-
-
-
+		console.log('temp: ' + machine.steps[machine.stepNumber].temp);
+		// machine.currentTemp = machine.steps[machine.stepNumber].temp;
+		machine.prepare();
 	} else {
 		// on the end, event when done
 		machine.emit('processDone');
@@ -206,6 +249,41 @@ var milliToMinutes = function(milliseconds) {
 		min = "0" + min;
 	}
 	return min + ':' + sec;
+};
+
+var prepareStep = function(step) {
+	console.log('relaystep_chemical: ' + step.chemical);
+	var relays = "";
+
+	// select pins corresponding to chemical
+	switch(step.chemical) {
+		case "A":
+			relays = A;
+			break;
+		case "B":
+			relays = B;
+			break;
+		case "C":
+			relays = C;
+			break;
+		case "water":
+			relays = water;
+			break;
+	}
+	relays.open();
+	pump.open();
+
+	// wait x seconds for setup to complete, could be setTimeout
+	board.wait(10000, function() {
+		relays.close();
+		pump.close();
+		// Start execution when setup is done
+		machine.emit('setupDone');
+    });
+};
+
+var tempControl = function(temp) {
+
 };
 
 module.exports = function() {
