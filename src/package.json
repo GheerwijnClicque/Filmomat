@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "electron app.js",
     "build": "build --x64",
-    "postinstall": "cd node_modules/leveldown HOME=~/.electron-gyp node-gyp rebuild --target=1.3.1 --arch=x64 --dist-url=https://atom.io/download/atom-shell"
+    "postinstall": "cd node_modules/leveldown HOME=~/.electron-gyp node-gyp rebuild --target=1.3.1 --arch=x64 --dist-url=https://atom.io/download/atom-shell",
+	"buildmac": "build --mac"
   },
   "repository": {
     "type": "git",
