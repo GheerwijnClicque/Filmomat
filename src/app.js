@@ -26,11 +26,15 @@ app.on('ready', function() {
 	    height: 600
 	});
 
+	if (process.platform != 'darwin') {
+		mainWindow.setMenu(null);
+	}
+
 	mainWindow.show();
-	mainWindow.loadURL(`file://${__dirname}/electron_html/index.html`);
+	mainWindow.loadURL(`file://${__dirname}/electron_public/index.html`);
 
 	// Open the DevTools.
-	mainWindow.webContents.toggleDevTools();
+	mainWindow.webContents.openDevTools({'mode': 'detach'});
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {
