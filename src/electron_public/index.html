@@ -41,9 +41,7 @@
 		<div class="window-content">
 			<div class="pane-group">
 				<div class="pane-sm sidebar">
-					<nav class="nav-group">
-						<h5 class="nav-group-title">Films</h5>
-						<a class="nav-group-item active">connors</a>
+					<nav class="nav-group" id="filmList">
 					</nav>
 				</div>
 				<div class="pane">
@@ -62,6 +60,7 @@
 			module = undefined;
 		}
 	</script>
+	<script src="bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="../node_modules/pouchdb/dist/pouchdb.min.js"></script>
 	<!-- Insert this line after script imports -->
 	<script>

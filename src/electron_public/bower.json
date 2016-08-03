@@ -1,0 +1,20 @@
+{
+  "name": "electron_public",
+  "homepage": "https://github.com/GheerwijnClicque/Filmomat",
+  "authors": [
+    "Arne Vlaeminck <arne.vlaeminck@student.odisee.be>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.0"
+  }
+}
