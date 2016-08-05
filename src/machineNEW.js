@@ -1,6 +1,9 @@
 var util = require('util');
 var five = require('johnny-five');
 var EventEmitter = require('events').EventEmitter;
+var VirtualSerialPort = require('udp-serial').SerialPort;
+var firmata = require('firmata');
+
 var board = new five.Board(), initialized; // {port: 'com4'}
 
 var lcd; // LCD
@@ -14,6 +17,17 @@ var A, B, C, water, pump, cleanup; // pin numbers for valves
 var temperature;
 
 var start;
+
+// ESP8266 (firmata baud = 115200)
+	//create the udp serialport and specify the host and port to connect to
+	var sp = new VirtualSerialPort({
+	  host: '192.168.4.1',
+	  type: 'udp4',
+	  port: 1025
+	});
+
+	//use the serial port to send a command to a remote firmata(arduino) device
+	var io = new firmata.Board(sp);
 
 machine.getInfo = function() {
 	if (machine.steps !== undefined) {
@@ -33,8 +47,42 @@ String.prototype.toMiliSeconds = function () {
 	return (+time[0]) * 60000 + (+time[1] || 0) * 1000;
 };
 
+var setupESP = function() {
+	io.once('ready', function(){
+		console.log('IO Ready');
+		io.isReady = true;
+
+		var board = new five.Board({io: io, repl: true});
+
+		board.on('ready', function(){
+			console.log('five ready');
+			//Full Johnny-Five support here:
+			machine.emit('ready');
+
+			A = new five.Relays([2, 3, 4]);
+			B = new five.Relays([5, 6, 7]);
+			C = new five.Relays([8, 9, 10]);
+			water = new five.Relay(11);
+			cleanup = new five.Relay(12);
+
+			pump = new five.Relay(13);
+			A.close();
+			B.close();
+			C.close();
+			cleanup.close();
+			water.close();
+			pump.close();
+
+			console.log('everything set');
+			initialized = true;
+		});
+	});
+};
+
 // function to init the board
 machine.init = function() {
+	// setupESP();
+
 	board.on('ready', function() {
 		// lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
 
