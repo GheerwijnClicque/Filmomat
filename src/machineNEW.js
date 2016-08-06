@@ -4,7 +4,9 @@ var EventEmitter = require('events').EventEmitter;
 var VirtualSerialPort = require('udp-serial').SerialPort;
 var firmata = require('firmata');
 
-var board = new five.Board(), initialized; // {port: 'com4'}
+// var board = new five.Board(), initialized; // {port: 'com4'}
+var initialized;
+var board;
 
 var lcd; // LCD
 var io;
@@ -52,7 +54,7 @@ var setupESP = function() {
 		console.log('IO Ready');
 		io.isReady = true;
 
-		var board = new five.Board({io: io, repl: true});
+	 	board = new five.Board({io: io, repl: true});
 
 		board.on('ready', function(){
 			console.log('five ready');
@@ -66,12 +68,12 @@ var setupESP = function() {
 			cleanup = new five.Relay(12);
 
 			pump = new five.Relay(13);
-			A.close();
-			B.close();
-			C.close();
-			cleanup.close();
-			water.close();
-			pump.close();
+			// A.open();
+			// B.close();
+			// C.close();
+			// cleanup.close();
+			// water.close();
+			// pump.close();
 
 			console.log('everything set');
 			initialized = true;
@@ -81,37 +83,37 @@ var setupESP = function() {
 
 // function to init the board
 machine.init = function() {
-	// setupESP();
+	 setupESP();
 
-	board.on('ready', function() {
-		// lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
-
-		machine.emit('ready');
-
-		A = new five.Relays([2, 3, 4]);
-		B = new five.Relays([5, 6, 7]);
-		C = new five.Relays([8, 9, 10]);
-		water = new five.Relay(11);
-		cleanup = new five.Relay(12);
-
-		pump = new five.Relay(13);
-		A.close();
-		B.close();
-		C.close();
-		cleanup.close();
-		water.close();
-		pump.close();
-
-		// temperature = new five.Thermometer({
-	    //    controller: "DS18B20",
-	    //    pin: 14
-	    //  });
-
-
-		// printLCD('ready', 0);
-		console.log('everything set');
-		initialized = true;
-	});
+	// board.on('ready', function() {
+	// 	// lcd = new five.LCD({pins: [8, 9, 4, 5, 6, 7], rows: 2, cols: 16});
+	//
+	// 	machine.emit('ready');
+	//
+	// 	A = new five.Relays([2, 3, 4]);
+	// 	B = new five.Relays([5, 6, 7]);
+	// 	C = new five.Relays([8, 9, 10]);
+	// 	water = new five.Relay(11);
+	// 	cleanup = new five.Relay(12);
+	//
+	// 	pump = new five.Relay(13);
+	// 	A.close();
+	// 	B.close();
+	// 	C.close();
+	// 	cleanup.close();
+	// 	water.close();
+	// 	pump.close();
+	//
+	// 	// temperature = new five.Thermometer({
+	//     //    controller: "DS18B20",
+	//     //    pin: 14
+	//     //  });
+	//
+	//
+	// 	// printLCD('ready', 0);
+	// 	console.log('everything set');
+	// 	initialized = true;
+	// });
 };
 
 // function to start the process
