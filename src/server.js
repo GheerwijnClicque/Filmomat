@@ -10,7 +10,7 @@ var events = require('events');
 var eventEmitter = new events.EventEmitter();
 var io = require('socket.io').listen(app.listen(config.port));
 var machine = require('./machineNEW.js')();
-
+var routes = require('./routes/routes');
 
 
 app.set('views', __dirname + '/views');
@@ -19,6 +19,8 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
+
+app.use('/', routes);
 
 // init the machine
 machine.init();
